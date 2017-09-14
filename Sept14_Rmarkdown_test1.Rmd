@@ -6,6 +6,9 @@ output: github_document
 ---
 
 This is a test 
+-bullet1
+-bullet2
+
 ```{r}
 ## insert your brilliant WORKING code here
 ```
