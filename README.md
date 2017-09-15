@@ -10,8 +10,8 @@ I hope the STAT545/547 course will teach me more skills in programming in R and 
 
 Below are **links** to my reponses for weekly homework assignments:
 
-* Homework 1 (Sept 19, 2017)
-[Exploring the gapminder dataset](https://github.com/suminwei2772/STAT545-hw01-Wei-Lisa/gapminder_hw01.Rmd)
+* Homework 1 (Sept 19, 2017) 
+[Exploring the gapminder dataset](https://github.com/suminwei2772/STAT545-hw01-Wei-Lisa/gapminder_hw01.md)
 
 ## Description of how this README.md file was written
 I looked at the [R Markdown Cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf) to find out how to incorporate Markdown syntax into my file. Specifically, I included links, made certain words bold, and put in section headers.
