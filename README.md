@@ -1,6 +1,6 @@
 # STAT545
 
-## Introduction  
+## Introduction   
 
 Hi, My name is Lisa Wei. I am currently a graduate student in the UBC Bioinformatics Training Program. I am working in [Dr. Marco Marra's group](http://www.bcgsc.ca/faculty/mmarra) in the area of single cell genomics. Please view my [LinkedIn profile](https://ca.linkedin.com/in/lisa-wei-7806a373) for a more detailed description of my background and education.
 
