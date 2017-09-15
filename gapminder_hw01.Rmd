@@ -1,31 +1,77 @@
 ---
-title: "hw01 gapminder"
+title: "Exploration of gapminder"
 author: "Lisa Wei"
 date: '2017-09-14'
 output: github_document
 ---
 
-### Loading the gapminder dataset and basic summary of the data.
+## Loading the gapminder dataset and basic summary of the data.
 
 ```{r load_in_dataframe, message=FALSE}
 library(gapminder) ### contains a dataset
 library(tidyverse) ### automatically loads in ggplot2
 
-gapminder 
-head(gapminder)
-glimpse(gapminder)
-tail(gapminder)
+#gapminder 
+#head(gapminder)
+#glimpse(gapminder)
+#tail(gapminder)
 summary(gapminder); 
-str(gapminder)
+#str(gapminder)
+dim(gapminder)
+class(gapminder)
 
 ```
 
 
+## Some basic plotting 
+
+Please note that year ranges from 1952 to 2007 in increments of 5 years as stated in R Doumentation. Life expectancy calculated from birth, in years. I obtained this information by typing in ?gapminder in RStudio.
 
 
+```{r basic_plots, message=FALSE}
+plot(lifeExp ~ year, gapminder, xlab="year", ylab="life expectancy (in years)", main="Life Expectancy with respect to time (years)")
+```
 
 
+The plot below shows how life expectancy is related to GDP per capita.
+```{r Exp_vs_gdp, message=FALSE}
+plot(lifeExp ~ gdpPercap, gapminder, xlab="GDP per capita", ylab="life expectancy (in years)", main="Life expectancy versus GDP per capita")
+```
 
+Here is the same plot as the one immediately above, but GDP per capita is put on a log scale to better see the increasing trend at the start of the year axis.
+
+```{r Exp_vs_log(gdp), message=FALSE}
+plot(lifeExp ~ log(gdpPercap), gapminder, xlab="log(GDP per capita)", ylab="life expectancy (in years)", main="Life expectancy versus log(GDP per capita)")
+```
+
+Looking closer at the distribution in life expectancy.
+
+```{r life_expectancy, message=FALSE}
+summary(gapminder$lifeExp)
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   23.60   48.20   60.71   59.47   70.85   82.60
+hist(gapminder$lifeExp, xlab="life expectancy", ylab="frequency", main="Distribution of life expectancy frequencies")
+```
+
+## Look at demographics. 
+
+```{r demographics, message=FALSE}
+table(gapminder$continent)
+barplot(table(gapminder$continent), main="Continents the Populations are From")
+```
+
+## A nicer rendering of plots using ggplot2
+
+```{r ggplot2, message=FALSE}
+p <- ggplot(filter(gapminder, continent != "Oceania"),
+            aes(x = gdpPercap, y = lifeExp)) # just initializes
+p <- p + scale_x_log10() # log the x axis the right way
+p + geom_point() # scatterplot
+p + geom_point(aes(color = continent)) # map continent to color
+p + geom_point(alpha = (1/3), size = 3) + geom_smooth(lwd = 3, se = FALSE)
+p + geom_point(alpha = (1/3), size = 3) + facet_wrap(~ continent) +
+  geom_smooth(lwd = 1.5, se = FALSE)
+```
 
 
 ### Student Reflection of Github Workflow
@@ -36,6 +82,7 @@ Some new things I learned while doing this homework assignment:
 
 1. If I have made changes locally, I need to push everything to Github first before I pull all files from Github to my local computer.
 
-2.  
+2. When I need to delete a file, I usually do it on Github rather than remotely since I found it screws up the pushing and pulling. I tried to delete and rename files remotely and pulling, but there were errors that came up. So I ended up having to start a completely new project.
+For most of the time, especially for the gapminder_hw01.Rmd file and README.md, I editted locally, saved, commited and pushed to Github. Each time I made sure to add comments when I made the commit to describe what changes were made.
 
 
