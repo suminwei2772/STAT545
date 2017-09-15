@@ -5,7 +5,7 @@ date: '2017-09-14'
 output: github_document
 ---
 
-### Loading the gapminder dataset and intially checking what the data looks like.
+### Loading the gapminder dataset and basic summary of the data.
 
 ```{r load_in_dataframe, message=FALSE}
 library(gapminder) ### contains a dataset
