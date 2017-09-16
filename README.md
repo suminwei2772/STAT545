@@ -17,8 +17,8 @@ I hope the STAT545/547 course will teach me more skills in programming in R and 
 Below are **links** to my reponses for weekly homework assignments:
 
 * Homework 1 (Sept 19, 2017) 
-[README.md](README.md) - this current file you are reading
-[Exploring the gapminder dataset](gapminder_hw01.md)
+   + [README.md](README.md) - this current file you are reading
+   + [Exploring the gapminder dataset](gapminder_hw01.md)
 
 ## Answers to questions posted for hw01 regarding providing a description of how this README.md file was written
 
