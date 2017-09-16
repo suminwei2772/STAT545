@@ -29,7 +29,7 @@ I looked at the [R Markdown Cheatsheet](https://www.rstudio.com/wp-content/uploa
 * Links are made by putting square brackets around the word(s) you want the viewer to click on to go to the link, followed immediately by the website address in brackets.
 * Section headers are made by putting one or more hash signs followed by the section header's name. There are different header levels. Level 1 headers has only 1 hash sign at the beginning, and with subsequent levels one adds on 1 extra hash sign every time.
 * Bullets were put in by putting in a star * sign.
-* Itallics were put in by putting 2 start signs ** on either side of the word.
+* Itallics were put in by putting 2 star signs ** on either side of the word.
 * check-mark boxes were drawn by putting a dash and then square brackets around "x"
 
 - [x] Did you edit in the browser at github.com?
