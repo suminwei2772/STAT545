@@ -4,7 +4,7 @@
 
 Hi, My name is Lisa Wei. I am currently a graduate student in the UBC Bioinformatics Training Program. I am working in [Dr. Marco Marra's group](http://www.bcgsc.ca/faculty/mmarra) in the area of single cell genomics. 
 
-Here are 2 cool tSNE plots showing a 2-dimensional representations of transcriptome profiles of single cells. The graphs describe how similar each cell is to other cells that were profiled:
+Here are 2 cool tSNE plots showing 2-dimensional representations of transcriptome profiles of single cells. The graphs describe how similar each cell is to other cells that were profiled:
 
 ![alt text](https://itefe54628.i.lithium.com/t5/image/serverpage/image-id/95i99DF6E12B128CCAD/image-size/large?v=1.0&px=999)
 
