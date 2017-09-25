@@ -17,11 +17,12 @@ I hope the STAT545/547 course will teach me more skills in programming in R and 
 Below are **links** to my reponses for weekly homework assignments:
 
 * Homework 1 (Sept 19, 2017) 
-   + [README.md](README.md) - this current file you are reading
+   + [README.md for repo](README.md) - this current file you are reading
+   + [README.md for hw01](/hw01/README.md)
    + [Exploring the gapminder dataset](/hw01/gapminder_hw01.md)
 
 * Homework 2 (Sept 26, 2017)
-   + [README.md for hw02](README.md) 
+   + [README.md for hw02](/hw02/README.md) 
    + [Exploring the gapminder dataset](/hw02/Gapminder_dplyr_explore_hw02.md)
 
 
