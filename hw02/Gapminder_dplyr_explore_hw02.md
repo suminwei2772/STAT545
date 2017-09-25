@@ -1,4 +1,4 @@
-Explore Gapminder with dplyr and ggplot
+Explore Gapminder with dplyr and ggplot2
 ================
 Lisa Wei
 2017-09-23

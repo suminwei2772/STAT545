@@ -1,5 +1,5 @@
 ---
-title: "Explore Gapminder with dplyr and ggplot"
+title: "Explore Gapminder with dplyr and ggplot2"
 author: "Lisa Wei"
 date: '2017-09-23'
 output: github_document
