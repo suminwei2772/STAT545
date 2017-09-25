@@ -1,6 +1,6 @@
-# STAT5 545 hw01
+# STAT5 545 homework 1
 
-## Folder contains response to hw01: Exploratin of the gapminder dataset.
+## Folder contains responses to hw01: Exploration of the gapminder dataset.
 
 Files
 

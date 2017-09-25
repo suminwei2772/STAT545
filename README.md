@@ -19,11 +19,11 @@ Below are **links** to my reponses for weekly homework assignments:
 * Homework 1 (Sept 19, 2017) 
    + [README.md for repo](README.md) - this current file you are reading
    + [README.md for hw01](/hw01/README.md)
-   + [Exploring the gapminder dataset](/hw01/gapminder_hw01.md)
+   + [Basic exploration of the gapminder dataset](/hw01/gapminder_hw01.md)
 
 * Homework 2 (Sept 26, 2017)
    + [README.md for hw02](/hw02/README.md) 
-   + [Exploring the gapminder dataset](/hw02/Gapminder_dplyr_explore_hw02.md)
+   + [Using dplyr and ggplot to explore the gapminder dataset](/hw02/Gapminder_dplyr_explore_hw02.md)
 
 
 ## Answers to questions posted for hw01 regarding providing a description of how this README.md file was written
