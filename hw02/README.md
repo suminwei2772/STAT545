@@ -4,8 +4,8 @@
 
 Files:
 
-* [Gapminder_dplyr_explore_hw02.md](Gapminder_dplyr_explore_hw02.md) Explores the Gapminder dataset with dplyr and ggplot:
-    + cSummary statistics for various quantitative and qualitative variables in gapminder
+* [Gapminder_dplyr_explore_hw02.md](Gapminder_dplyr_explore_hw02.md) explores the Gapminder dataset with dplyr and ggplot:
+    + Summary statistics for various quantitative and qualitative variables in gapminder
     + Exploration of gapminder using various dplyr functions such as `select()` and `filter()`
     + Using `ggplot()` to visualize the data such as histograms, barplots, and scatterplots
     
