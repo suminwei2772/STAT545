@@ -23,15 +23,9 @@ library(kableExtra)
 
 ### "Smell" test the data
 
-Q1.1: Is it a data.frame, a matrix, a vector, a list? A: Gapminder is a tibble, data.frame, and a list.
+Q1.1, Q1.2: Is it a data.frame, a matrix, a vector, a list? What’s its class?
 
-``` r
-class(gapminder)
-```
-
-    ## [1] "tbl_df"     "tbl"        "data.frame"
-
-Q1.2: What’s its class? A: Gapminder is a list as indicated by `typeof()`. But it is also a tibble and data frame if one uses `class()`.
+A: Gapminder is a tibble, data.frame, and a list as indicated by `class()` and `typeof()`.
 
 ``` r
 typeof(gapminder)
@@ -39,7 +33,15 @@ typeof(gapminder)
 
     ## [1] "list"
 
-Q1.3: How many rows/observations? A: Number of rows:
+``` r
+class(gapminder)
+```
+
+    ## [1] "tbl_df"     "tbl"        "data.frame"
+
+Q1.3: How many rows/observations?
+
+Answer below:
 
 ``` r
 nrow(gapminder); 
@@ -47,7 +49,9 @@ nrow(gapminder);
 
     ## [1] 1704
 
-Q1.4: How many columns/variables? A: number of columns
+Q1.4: How many columns/variables?
+
+Answer below:
 
 ``` r
 ncol(gapminder)
@@ -55,7 +59,7 @@ ncol(gapminder)
 
     ## [1] 6
 
-Double check with dim() showing dimensions of the data
+Double check with `dim()` showing dimensions of the data
 
 ``` r
 dim(gapminder); 
@@ -65,7 +69,7 @@ dim(gapminder);
 
 Q1.5: Can you get these facts about “extent” or “size” in more than one way? Can you imagine different functions being useful in different contexts?
 
-A: Can just type in gapminder to get a sneak peak of the data as well as the dimensions. Also, other functions that could be useful is using `str()` which shows the overall dimension and type of the dataset and the type of each variable/column. The `str()` function is very useful is one wants a quick way to access the class of each variable in order to do operations on certain columns.
+A: Can just type in `gapminder` to get a sneak peak of the data as well as the dimensions. Also, another function that could be useful is `str()` which shows the overall dimension, type of the data and the class of each variable/column. The `str()` function is very useful if one wants a quick way to access the class of each variable in order to do operations on certain columns.
 
 ``` r
 gapminder
@@ -98,13 +102,16 @@ str(gapminder)
     ##  $ pop      : int  8425333 9240934 10267083 11537966 13079460 14880372 12881816 13867957 16317921 22227415 ...
     ##  $ gdpPercap: num  779 821 853 836 740 ...
 
-Q1.6: What data type is each variable? A: Can be answered with `str()` as seen above:
+Q1.6: What data type is each variable?
 
--   Country is factor
--   Continent is factor
--   Year is integer
--   LifeExp is number
--   Pop is integer
+A: Can be answered with `str()` as seen above:
+
+-   Country is class `factor`
+-   Continent is class `factor`
+-   Year is is class `integer`
+-   Life Expectancy is class `numeric`
+-   Population is class `integer`
+-   GDP per Capita is class `numeric`
 
 Can also check the data type of each variable one by one:
 
@@ -149,7 +156,7 @@ Explore individual variables
 
 Explore categorical variables `continent` and `country`. Explore quantitative variables `population` and `lifeExp`.
 
-Q2.1 What are possible values (or range, whichever is appropriate) of each variable?
+Q2.1: What are possible values (or range, whichever is appropriate) of each variable?
 
 A: For continent and country, since they categorical, below are all possible values for each variable. There are in total 142 distinct countries and 5 distinct continents in the gapminder dataset.
 
@@ -249,7 +256,7 @@ n_distinct(gapminder$country)
 
     ## [1] 142
 
-For population and lifeExp, since they are quantitative, let's explore the the range. As seen below, the range of pop is 60011 to 1318683096. The range of lifeExp is 23.599 to 82.603.
+For population and lifeExp, since they are quantitative, let's explore the range. As seen below, the range of pop is 60011 to 1318683096. The range of lifeExp is 23.599 to 82.603.
 
 ``` r
 range(gapminder$pop)
@@ -290,7 +297,9 @@ max(gapminder$lifeExp)
 
 Q2.2: What values are typical? What's the spread? What's the distribution?
 
-A: For continent, Africa shows up with the highest frequency. For country, all countries show up at equal frequency of 12 times. Since all countries have the same frequency, I will only plot a bar graph for continent.
+A: For continent, Africa shows up with the highest frequency. The spread/standard deviation of the continent counts is 215.4325881, mean is 340.8. For country, all countries show up at equal frequency of 12 times. So standard deviation is 0 and mean is 12.
+
+Since all countries have the same frequency, I will only plot a bar graph for continent.
 
 ``` r
 summary(gapminder)
@@ -429,43 +438,44 @@ sort(table(gapminder$country), decreasing=TRUE)
 ggplot(data=gapminder, aes(continent)) + geom_bar() + ggtitle("Frequency of Each Continent in the Gapminder Dataset") 
 ```
 
-![](Gapminder_dplyr_explore_hw02_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-10-1.png)
+![](Gapminder_dplyr_explore_hw02_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-9-1.png)
 
-``` r
-summary(gapminder)
-```
+For population, the minimum is 60011 and maximum is 1318683096. Mean = 29601212 and sd = 106157896. For life expectancy, the minimum is 23 and maximum is 82. Mean = 59 and sd = 12.
 
-    ##         country        continent        year         lifeExp     
-    ##  Afghanistan:  12   Africa  :624   Min.   :1952   Min.   :23.60  
-    ##  Albania    :  12   Americas:300   1st Qu.:1966   1st Qu.:48.20  
-    ##  Algeria    :  12   Asia    :396   Median :1980   Median :60.71  
-    ##  Angola     :  12   Europe  :360   Mean   :1980   Mean   :59.47  
-    ##  Argentina  :  12   Oceania : 24   3rd Qu.:1993   3rd Qu.:70.85  
-    ##  Australia  :  12                  Max.   :2007   Max.   :82.60  
-    ##  (Other)    :1632                                                
-    ##       pop              gdpPercap       
-    ##  Min.   :6.001e+04   Min.   :   241.2  
-    ##  1st Qu.:2.794e+06   1st Qu.:  1202.1  
-    ##  Median :7.024e+06   Median :  3531.8  
-    ##  Mean   :2.960e+07   Mean   :  7215.3  
-    ##  3rd Qu.:1.959e+07   3rd Qu.:  9325.5  
-    ##  Max.   :1.319e+09   Max.   :113523.1  
-    ## 
+Below are histograms with some added features:
 
-For population, as shown in the summary table just above, the minimum is 60011 and maximum is 1318683096. Mean = 29601212 and sd = 106157896. For life expectancy, the minimum is 23 and maximum is 82. Mean = 59 and sd = 12.
-
-Below are histograms with additional features:
-
-1.  A gradient of the colour scheme that varies according to the frequency of the values.
+1.  A gradient of the colour scheme for the bars that varies according to the frequency of the values.
 
 2.  A normal distribution curve to compare the distribution of the population/life expectancy data to a theoretical model of a normal curve: The curve does not seem to fit the data well at all, as indicated by the red flat line in each plot.
 
-![](Gapminder_dplyr_explore_hw02_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-12-1.png)![](Gapminder_dplyr_explore_hw02_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-12-2.png)
+``` r
+ggplot(data=gapminder, aes(pop)) + 
+  geom_histogram(aes(fill=..count..), binwidth=5e+07) + 
+     scale_y_continuous(name = "Count") +
+        stat_function(fun = dnorm, colour = "red",args = list(mean = mean(gapminder$pop, na.rm = TRUE),
+                                 sd = sd(gapminder$pop, na.rm = TRUE))) +
+          annotate("text", x = 5e+08, y = 1000, label = "mean = 29601212, sd=106157897") +
+            ggtitle("Distribution of the population in gapminder") + xlab("Population")
+```
+
+![](Gapminder_dplyr_explore_hw02_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-10-1.png)
+
+``` r
+ggplot(data=gapminder, aes(lifeExp)) + 
+  geom_histogram(aes(fill=..count..)) + 
+     scale_y_continuous(name = "Count") +
+        stat_function(fun = dnorm, colour = "red",args = list(mean = mean(gapminder$lifeExp, na.rm = TRUE),
+                                 sd = sd(gapminder$lifeExp, na.rm = TRUE))) +
+          annotate("text", x=40, y=150, label = "mean = 59, sd=12") +
+            ggtitle("Distribution of the life expectancy in gapminder") + xlab("Life Expectancy")
+```
+
+![](Gapminder_dplyr_explore_hw02_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-10-2.png)
 
 Explore various plot types and practicing using `filter()`, `select()`, and `%>%`
 ---------------------------------------------------------------------------------
 
--   Scatterplot of life expectancy vs GDP per capita, separate plot for each continent and size of the points indicating year. Added a line of best fit to the data.
+-   Scatterplot of life expectancy vs GDP per capita, separate plot for each continent. Size of the points indicates year. Added a line of best fit to the data.
 
 ``` r
 p <- ggplot(gapminder, aes(x=gdpPercap, y=lifeExp)) + 
@@ -476,26 +486,26 @@ p <- ggplot(gapminder, aes(x=gdpPercap, y=lifeExp)) +
 p
 ```
 
-![](Gapminder_dplyr_explore_hw02_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-13-1.png)
+![](Gapminder_dplyr_explore_hw02_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-11-1.png)
 
--   Violin plots of population by year after 2000, grouped by 2 continents Africa and Amercias (compare 2 continents). Also I'm piping filtered data into ggplot in order to practice using filter, select, and piping into ggplot.
+-   Violin plots of population by year after 2000, grouped by 2 continents Africa and Amercias (intending to compare populations between the 2 continents). Also I'm piping filtered data into ggplot in order to practice using `filter()`, `select()`, and piping into `ggplot2`.
 
 ``` r
 filter(gapminder, (continent=="Africa" & year>2000) | (continent=="Americas" & year>2000)) %>% ggplot(aes(x=factor(year), y=gdpPercap)) + geom_violin(aes(fill=factor(continent))) + ggtitle("Distribution of population for year>2000 in Africa vs Americas") + xlab("Year") + ylab("GDP per capita")
 ```
 
-![](Gapminder_dplyr_explore_hw02_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-14-1.png)
+![](Gapminder_dplyr_explore_hw02_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-12-1.png)
 
--   Histogram of life expectancies, between 2 different continents on the same plot.
+-   Histograms of life expectancies between 2 different continents. Two distributions are overlaid on the same plot.
 
 ``` r
 filter(gapminder, continent %in% c("Africa","Americas")) %>% select(lifeExp,continent) %>% ggplot(aes(x=lifeExp, fill=factor(continent))) + 
     geom_histogram(alpha = 0.5, position="identity") + ggtitle("Distribution of life expectacies between Africa and America") + xlab("Life expectancy") + ylab("Frequency")
 ```
 
-![](Gapminder_dplyr_explore_hw02_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-15-1.png)
+![](Gapminder_dplyr_explore_hw02_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-13-1.png)
 
-### Additional practices: Practicing using arrange() and mutate()
+### Additional practices: Practicing using `arrange()` and `mutate()`
 
 First, arrange the data by year, and then sort by lifeExp in decreasing order.
 
@@ -513,7 +523,7 @@ g <- arranged_dat %>% mutate(gdp = gdpPercap * pop) %>% ggplot(aes(lifeExp, gdp)
 g
 ```
 
-![](Gapminder_dplyr_explore_hw02_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-17-1.png)
+![](Gapminder_dplyr_explore_hw02_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-15-1.png)
 
 Make a boxplot of gdp per billion comparing between America, Americas, Asia over time after year 2000.
 
@@ -527,14 +537,14 @@ g <- mutate(gapminder, gdp = gdpPercap * pop, gdpBill = round(gdp/1000000000, 1)
 g
 ```
 
-![](Gapminder_dplyr_explore_hw02_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-18-1.png)
+![](Gapminder_dplyr_explore_hw02_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-16-1.png)
 
 Assessing the line of code shown below. Present numerical tables using `kable()`. Exploring more `dplyr` functions.
 -------------------------------------------------------------------------------------------------------------------
 
 > filter(gapminder, country == c("Rwanda", "Afghanistan"))
 
-This code is wrong as seen below. It seems that the above line of code outputs only combinations of all variables within the data where the year didn't repeat for rows containing Rwanda and Afghanistan, after filtering for the selected countries. To get all the data where the country is either Rwanda and Afghanistan, the `==` should be changed to `%in%` as shown below:
+Assuming the analyst’s intent was to get the data for Rwanda and Afghanistan, the above line of code would not achieve this. It seems that the above line of code outputs only combinations of all variables within the data where the year didn't repeat for rows containing Rwanda and Afghanistan, after filtering for the selected countries. To get all the data where the country is either Rwanda and Afghanistan, the `==` should be changed to `%in%` as shown below:
 
 > filter(gapminder, country %in% c("Rwanda", "Afghanistan"))
 
@@ -599,7 +609,7 @@ identical(t1,t2)
 
     ## [1] FALSE
 
-The second one included more data than the first version of the code, and these additional rows seem to contain data within Rwanda and Afghanistan, so the second version of the code must be the correct one.
+The second one included more data (24 rows) than the first version of the code (output had 12 rows), and these additional rows seem to contain data exclusively for Rwanda and Afghanistan, so the second version of the code must be "more" correct as it captured more data satisfying the criteria imposed by the analyst.
 
 Now, visualize in a nice table:
 
@@ -670,11 +680,11 @@ Report your process
 
 -   What was hard/easy.
 
-It was good that we were working with a dataset (Gapminder) that was already introduced in class since I already had some familiarity of the variables and general statistics. This made it easier to think about what types of plots would be useful and suitable for exploring/representation the Gapminder dataset. The hard part was figuring out how to draw the various types of plots with ggplot2. Specifically, it took me a while to figure out how to group the violin and boxplots by a specific categorical variable. Also, figuring out where to include the `aes()` specifications and the colours to use in the plot to draw points or bars were time-consuming. I basically Googled every question just as Vincenzo suggested in class.
+It was good that we were working with a dataset (Gapminder) that was already introduced in class since I already had some familiarity of the variables and general statistics. This made it easier to think about what types of plots would be useful and suitable for exploring/representating the Gapminder dataset. The hard part was figuring out how to draw the various types of plots with ggplot2. Specifically, it took me a while to figure out how to group the violin plots and boxplots by a specific categorical variable. Also, figuring out where to include the `aes()` and fill colour specifications was time-consuming. I basically Googled every question just as Vincenzo suggested in class.
 
 -   Problems you solved
 
-1.  Aligning columns in the output table by the `kable()` function. This was achieved using `align=c(rep('c', times=7)`. I found this in a Stackoverlow thread as indicated below.
+1.  Aligning columns in the output table by the `kable()` function. This was achieved using `align=c(rep('c', times=7)`. I found this in a Stackoverflow thread as indicated below.
 
 2.  How to overlay histograms (in my case distributions of life epectancy for 2 continents) onto one plot. This was achieved by usig `fill=factor(continent)` in the global `ggplot()` call.
 
@@ -682,7 +692,7 @@ It was good that we were working with a dataset (Gapminder) that was already int
 
 > filter(gapminder, country == c("Rwanda", "Afghanistan"))
 
-I had assumed that the above line of code wouldn't output anything since there are no countries that has a name `c("Rwanda","Afghanistan")`. But when I actually ran the code, it gave me an output. And it was only until I ran what I thought was the correct version using the `%in%` function that I realized the first version didn't output as much data as my version of the code. So always explicitly check, and never assume anything!
+I had assumed that the above line of code wouldn't output anything since there are no countries that had a name called `c("Rwanda","Afghanistan")`. But when I actually ran the code, it gave me an output. And it was only until I ran what I thought was the correct version using the `%in%` function that I realized the first version didn't output as much data as my version of the code. So always explicitly check, and never assume anything!
 
 -   Helpful tutorials you read:
 
