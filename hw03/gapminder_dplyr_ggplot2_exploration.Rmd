@@ -1,0 +1,183 @@
+---
+title: "Exploration of Gapminder using dplyr and ggplot2"
+author: "Lisa Wei"
+date: '2017-09-30'
+output: github_document
+---
+
+### Loading required packages.
+
+```{r load, message=FALSE}
+library(ggplot2)
+library(dplyr)
+library(gapminder)
+```
+
+### Task 1: Compute trimmed mean (and untrimmed mean) of life expectancy
+
+```{r trimmed_mean, warning=FALSE, echo=FALSE}
+
+g1 <- gapminder %>%
+  group_by(year) %>%
+  summarize(trimmed0.1_avg_lifeExp = mean(lifeExp, trim = .1), trimmed0.05_avg_lifeExp = mean(lifeExp, trim = .05), untrimmed_avg_lifeExp = mean(lifeExp))
+
+
+g1 %>% knitr::kable(format="markdown",align=c(rep('c',times=7)), padding=2, col.names=c("Year","Trimmed (0.1) Average Life Expectancy","Trimmed (0.05) Average Life Expectancy", "Untrimmed Average Life Expectancy"))
+
+
+ggplot(g1, aes(x = factor(year))) + 
+    geom_point(aes(y = trimmed0.1_avg_lifeExp), colour="green") + 
+    geom_point(aes(y=trimmed0.05_avg_lifeExp), colour= "blue") +
+      geom_point(aes(y = untrimmed_avg_lifeExp), colour="red") + 
+        xlab("Year") + 
+          ylab("Average Life Expectancy") + 
+            ggtitle("Trimmed and untrimmed mean of life expectancy across time") +
+              annotate("text", x=4, y=65, colour="red", label="Red = untrimmed mean") +
+                annotate("text", x=4,y=63, colour="blue", label="Blue = Trimmed mean 0.05") +
+                  annotate("text", x=4,y=61, colour="green", label="Green = Trimmed mean 0.1") 
+            
+    
+```
+
+As can be observed in the above plot, trimming the values before computing the mean does make a difference, and each of the trimmed means differ from the untrimmed mean. The greater the trim, the greater the increasing trend observed for later years.
+
+
+
+### Task 2: Get the maximum and minimum of GDP per capita for all continents.
+
+```{r max_min_gdp, warning=FALSE}
+g2 <- gapminder %>%
+    group_by(continent) %>% 
+    summarize(min_gdpPercap = min(gdpPercap),
+              max_gdpPercap = max(gdpPercap), dif=max(gdpPercap)-min(gdpPercap), mean=mean(gdpPercap))
+
+g2 %>% knitr::kable(format="markdown",align=c(rep('c',times=7)), padding=2, col.names=c("Continent","Minimum gdp per capita","Maximum gdp per capita","Range","Average"))
+
+gapminder %>%
+    group_by(continent) %>% 
+    summarize(mean=mean(gdpPercap), q.1 = quantile(gdpPercap,0.1), q.9 = quantile(gdpPercap, 0.9)) %>%
+      ggplot(aes(x = factor(continent), y=mean, fill=continent)) +         
+        geom_point(aes(colour=continent)) +
+          geom_errorbar(aes(ymin=q.1, ymax=q.9, colour=continent), width=.1) +
+            xlab("Continent") + ylab("range of gdp per capita") + ggtitle("GDP per capita (showing 10th and 90th percentiles) for each continent")
+
+```
+
+As shown in the plot above, Asia and Europe seem to have the greatest distribution of values, as measured by the 10th and 9th percentiles. Though in the table, Asia has the greater range. Both the plot and table show Asia having a high distribution compared to other continents. 
+
+
+## Task 3: Look at spread of gdp per capita for each continent
+
+```{r spread, message=FALSE, warning=FALSE}
+g3 <- gapminder %>%
+  group_by(continent) %>%
+  summarize(gdp_spread = sd(gdpPercap))
+
+g3 %>% knitr::kable(format="markdown",align=c(rep('c',times=7)), padding=2, col.names=c("Continent","Spread of gdp per capita"))
+```
+
+Let's take the continents with the greatest and lowest spreads and plot their distributions to compare.
+
+```{r spreads, warning=FALSE}
+## take the continent with the highest and lowest spreads
+gapminder %>%
+  group_by(continent) %>% filter(continent %in% c("Africa","Asia")) %>% ggplot(aes(x=gdpPercap, fill=factor(continent))) + 
+    geom_histogram(alpha = 0.5, position="identity") + ggtitle("Distribution of gdp per capita for each continenet") + xlab("GDP per capita") + ylab("Frequency")
+
+```
+
+Indeed, Asia has the greatest standard deviation, while Africa has the lowest. This corroborates nicely with the results from task 2 and the 10th and 90th quantiles computed for GDP per capita for each continent. Asia has the greatest range and distribution there as well. Thus these two tasks provide validation.
+
+
+## Change of life expectancy over time on different continents
+
+```{r pop_change_over_time, results = 'asis', warning=FALSE}
+
+p4 <- gapminder %>% 
+     group_by(continent) %>%
+     mutate(lifeExp_change = lifeExp - lifeExp[1])
+```
+
+Since the entire table would be too large to visualize, we will only take a look at the first few rows of the table showing changes in life expectancy over time for each continent.
+
+```{r}
+head(p4) %>% knitr::kable(format="markdown",align=c(rep('c',times=7)), padding=2)
+
+ggplot(p4, aes(x=year, y=lifeExp_change, colour=continent)) + 
+    geom_point(alpha=0.3) + 
+      facet_wrap(~continent) + 
+          geom_smooth(se=FALSE, span=1, width=0.0001, colour="black") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+            ggtitle("Change in life expectancy over time compared to the first recorded year - 1952 - per continent")
+
+```
+
+
+There seems to be an increasing trend in life expectancy for all continents, although Asia seems to have the greatest rate of increase as shown by a steeper curve.
+
+
+### Task 5: Number of countries on each continent that have a life expectancy, for each year, that's less than the mean of world-wide life expectancy for all years recorded
+
+1. Calcuate the mean life expectancy: 59.47444 yrs
+
+```{r mean_life_exp, warning=FALSE, echo=FALSE}
+summarize(gapminder, mean_lifeExp=mean(lifeExp)) %>% knitr::kable()
+
+gapminder %>% 
+    filter(lifeExp < 59.47444)  %>% 
+      group_by(continent,year) %>% 
+        summarize(distinct_countries=n_distinct(country)) %>% knitr::kable(format="markdown",align=c(rep('c',times=7)), padding=2)
+```
+
+2. Retrieve the absolute number of countries, over time, with life expectancies greater than the above mean of 59.47444 years, for each continent. Then, visualize with a plotshowing trends over time per continent.
+
+```{r trend_life_exp, warning=FALSE, echo=FALSE}
+gapminder %>% 
+  group_by(continent,year) %>% 
+        summarize(distinct_countries=n_distinct(country[lifeExp < 59.47444])) %>% 
+          ggplot(aes(x=year,y=distinct_countries, colour=continent)) + geom_point() + geom_smooth(method="lm",se=F) + 
+            ggtitle("Number of countries with below average life expectancy over time")
+```
+
+3. Retrieve the proportion of countries on each continent (absolute number divided by the total number of countries in each continent), over time, with life expectancies greater than the above mean of 59.47444 years, for each continent. Then, visualize with a plotshowing trends over time per continent.
+
+```{r trend_life_exp2, warning=FALSE}
+e1 <-  gapminder %>%  
+        group_by(continent,year) %>% 
+          summarize(proportion_distinct_countries=n_distinct(country[lifeExp < 59.47444])/n_distinct(country))
+
+e1 %>% knitr::kable(format="markdown",align=c(rep('c',times=7)), padding=2)
+
+
+ gapminder %>%  
+      group_by(continent,year) %>% 
+        summarize(proportion_distinct_countries=n_distinct(country[lifeExp < 59.47444])/n_distinct(country)) %>% 
+          ggplot(aes(x=year,y=proportion_distinct_countries, colour=continent)) + geom_point() + geom_smooth(method="lm",se=F) +
+            ggtitle("Proportion of countries on each continent with below average life expectancy")
+
+
+
+```
+
+
+
+### Trends:
+
+1. All continents show a decreasing trend in terms of the number of countries with lower than average life expectancy, over time. Oceania did not have any countries with below average life expectancy to begin with.
+
+2. Aside form Oceania, Europe as the earliest in terms of achieving zero countries with below average life expectancy. Africa had the greatest number of countries at each year with below average life expectancy.
+
+3. When scaled by the total number of countries per continent, one can better observe that the starting point at 1952 for Asia and Africa are not so different, but Asia saw a steep decline in below average life expectancy compared to Africa over time. Trend is similar for Asia and Americas.
+
+
+### Report your process
+
+1. I couldn't figure out how to format the trimmed and untrimmed averages of life expectancy such that `ggplot2()` would output a proper legend labelling which colour of the points correpond to which type of average. I tried a number of `ggplot2` functions like `scale_fill_discrete()`, `guide()`, and `scale_fill_manual()` but none of them worked. So in the end, I just manually added text to explain relationship between colour of points and trimmed/untrimmed averages.
+
+2. I realized after I completed the first draft of the assignment that having the relative number of countries with below average life expectancy would make more sense since it is not as meaningful to look at absolute numbers without scaling. And in trying to add a second table of relative number of countries, I realized that when I had originally filtered out all rows in gapminder with life expectancy greater than the average life expectancy, this actually resulted in all countries in Oceania being eliminated. So I took out the `filter()` step, and instead just specified `n_distinct(country[lifeExp < 59.47444])` when calculating either absolute or relative numbers using the `summarize()` function.
+
+
+### Resources
+1. https://github.com/STAT545-UBC/Discussion/issues/132
+2. http://ggplot2.tidyverse.org/reference/stat_summary.html
+
+
