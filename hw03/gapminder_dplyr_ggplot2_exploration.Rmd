@@ -89,7 +89,7 @@ gapminder %>%
 Indeed, Asia has the greatest standard deviation, while Africa has the lowest. This corroborates nicely with the results from task 2 and the 10th and 90th quantiles computed for GDP per capita for each continent. Asia has the greatest range and distribution there as well. Thus these two tasks provide validation.
 
 
-## Change of life expectancy over time on different continents
+### Task 4: Change of life expectancy over time on different continents
 
 ```{r pop_change_over_time, results = 'asis', warning=FALSE}
 
