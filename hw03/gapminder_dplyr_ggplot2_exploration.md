@@ -13,6 +13,15 @@ library(gapminder)
 
 ### Task 1: Compute trimmed mean (and untrimmed mean) of life expectancy
 
+``` r
+g1 <- gapminder %>%
+  group_by(year) %>%
+  summarize(trimmed0.1_avg_lifeExp = mean(lifeExp, trim = .1), trimmed0.05_avg_lifeExp = mean(lifeExp, trim = .05), untrimmed_avg_lifeExp = mean(lifeExp))
+
+
+g1 %>% knitr::kable(format="markdown",align=c(rep('c',times=7)), padding=2, col.names=c("Year","Trimmed (0.1) Average Life Expectancy","Trimmed (0.05) Average Life Expectancy", "Untrimmed Average Life Expectancy"))
+```
+
 <table>
 <colgroup>
 <col width="6%" />
@@ -103,6 +112,19 @@ library(gapminder)
 </tr>
 </tbody>
 </table>
+
+``` r
+ggplot(g1, aes(x = factor(year))) + 
+    geom_point(aes(y = trimmed0.1_avg_lifeExp), colour="green") + 
+    geom_point(aes(y=trimmed0.05_avg_lifeExp), colour= "blue") +
+      geom_point(aes(y = untrimmed_avg_lifeExp), colour="red") + 
+        xlab("Year") + 
+          ylab("Average Life Expectancy") + 
+            ggtitle("Trimmed and untrimmed mean of life expectancy across time") +
+              annotate("text", x=4, y=65, colour="red", label="Red = untrimmed mean") +
+                annotate("text", x=4,y=63, colour="blue", label="Blue = Trimmed mean 0.05") +
+                  annotate("text", x=4,y=61, colour="green", label="Green = Trimmed mean 0.1") 
+```
 
 ![](gapminder_dplyr_ggplot2_exploration_files/figure-markdown_github-ascii_identifiers/trimmed_mean-1.png)
 
@@ -218,9 +240,20 @@ There seems to be an increasing trend in life expectancy for all continents, alt
 
 1.  Calcuate the mean life expectancy: 59.47444 yrs
 
+``` r
+summarize(gapminder, mean_lifeExp=mean(lifeExp)) %>% knitr::kable()
+```
+
 |  mean\_lifeExp|
 |--------------:|
 |       59.47444|
+
+``` r
+gapminder %>% 
+    filter(lifeExp < 59.47444)  %>% 
+      group_by(continent,year) %>% 
+        summarize(distinct_countries=n_distinct(country)) %>% knitr::kable(format="markdown",align=c(rep('c',times=7)), padding=2)
+```
 
 | continent | year | distinct\_countries |
 |:---------:|:----:|:-------------------:|
@@ -266,6 +299,14 @@ There seems to be an increasing trend in life expectancy for all continents, alt
 |   Europe  | 1972 |          1          |
 
 1.  Retrieve the absolute number of countries, over time, with life expectancies greater than the above mean of 59.47444 years, for each continent. Then, visualize with a plotshowing trends over time per continent.
+
+``` r
+gapminder %>% 
+  group_by(continent,year) %>% 
+        summarize(distinct_countries=n_distinct(country[lifeExp < 59.47444])) %>% 
+          ggplot(aes(x=year,y=distinct_countries, colour=continent)) + geom_point() + geom_smooth(method="lm",se=F) + 
+            ggtitle("Number of countries with below average life expectancy over time")
+```
 
 ![](gapminder_dplyr_ggplot2_exploration_files/figure-markdown_github-ascii_identifiers/trend_life_exp-1.png)
 

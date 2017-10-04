@@ -15,7 +15,7 @@ library(gapminder)
 
 ### Task 1: Compute trimmed mean (and untrimmed mean) of life expectancy
 
-```{r trimmed_mean, warning=FALSE, echo=FALSE}
+```{r trimmed_mean, warning=FALSE}
 
 g1 <- gapminder %>%
   group_by(year) %>%
@@ -68,7 +68,7 @@ As shown in the plot above, Asia and Europe seem to have the greatest distributi
 
 ## Task 3: Look at spread of gdp per capita for each continent
 
-```{r spread, message=FALSE, warning=FALSE}
+```{r spread, warning=FALSE}
 g3 <- gapminder %>%
   group_by(continent) %>%
   summarize(gdp_spread = sd(gdpPercap))
@@ -91,7 +91,7 @@ Indeed, Asia has the greatest standard deviation, while Africa has the lowest. T
 
 ### Task 4: Change of life expectancy over time on different continents
 
-```{r pop_change_over_time, results = 'asis', warning=FALSE}
+```{r pop_change_over_time, warning=FALSE}
 
 p4 <- gapminder %>% 
      group_by(continent) %>%
@@ -119,7 +119,7 @@ There seems to be an increasing trend in life expectancy for all continents, alt
 
 1. Calcuate the mean life expectancy: 59.47444 yrs
 
-```{r mean_life_exp, warning=FALSE, echo=FALSE}
+```{r mean_life_exp, warning=FALSE}
 summarize(gapminder, mean_lifeExp=mean(lifeExp)) %>% knitr::kable()
 
 gapminder %>% 
@@ -130,7 +130,7 @@ gapminder %>%
 
 2. Retrieve the absolute number of countries, over time, with life expectancies greater than the above mean of 59.47444 years, for each continent. Then, visualize with a plotshowing trends over time per continent.
 
-```{r trend_life_exp, warning=FALSE, echo=FALSE}
+```{r trend_life_exp, warning=FALSE}
 gapminder %>% 
   group_by(continent,year) %>% 
         summarize(distinct_countries=n_distinct(country[lifeExp < 59.47444])) %>% 
