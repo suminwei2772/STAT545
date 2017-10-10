@@ -31,7 +31,7 @@ Below are **links** to my reponses for weekly homework assignments:
 
 * Homework 4 (October 10, 2017)
   + [README.md for hw03](/hw04/README.md)
-  + [hw04_tidy_data_and_joints.md](/hw04/hw04_tidy_data_and_joints.md): Explores the Gapminder dataset with reshaping and various `join()` functions
+  + [hw04_tidy_data_and_joints.md](/hw04/hw04_tidy_data_and_joins.md): Explores the Gapminder dataset with reshaping and various `join()` functions
   
 
 ## Answers to questions posted for hw01 regarding providing a description of how this README.md file was written
