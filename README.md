@@ -29,6 +29,11 @@ Below are **links** to my reponses for weekly homework assignments:
   + [README.md for hw03](/hw03/README.md)
   + [gapminder_dplyr_ggplot2_exploration.md](/hw03/gapminder_dplyr_ggplot2_exploration.md): Using dplyr and ggplot2 to explore specific aspects of gapminder including changes in life expectnacy over time and comparing distributions of GDP per capita between continents
 
+* Homework 4 (October 10, 2017)
+  + [README.md for hw03](/hw04/README.md)
+  + [hw04_tidy_data_and_joints.md](/hw04/hw04_tidy_data_and_joints.md): Explores the Gapminder dataset with reshaping and various `join()` functions
+  
+
 ## Answers to questions posted for hw01 regarding providing a description of how this README.md file was written
 
 - [x] Include a description of how you got the changes into README.md on GitHub.

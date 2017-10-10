@@ -1,0 +1,200 @@
+---
+title: "Tidy data and joins"
+author: "Lisa Wei"
+date: '2017-10-07'
+output: github_document
+---
+
+
+## General data reshaping and relationship to aggregation
+
+### Activity #2
+
+Make a tibble with one row per year and columns for life expectancy for two or more countries.
+Use knitr::kable() to make this table look pretty in your rendered homework.
+Take advantage of this new data shape to scatterplot life expectancy for one country against that of another.
+
+
+```{r load_libs, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(gapminder)
+```
+
+```{r,warning=FALSE, message=FALSE}
+df <- gapminder %>% select(year, lifeExp, country) %>% distinct() %>% filter(country %in% c("Australia","Ecuador","Denmark")) %>% arrange(year) 
+
+df <- as_tibble(df)
+
+df2 <- df %>% gather(key="Measure", value="Units", lifeExp)
+
+df2 %>% knitr::kable(format="markdown",align=c(rep('c',times=7)), padding=2)   
+
+ggplot(df2, aes(x=year, y=Units, colour=country)) + 
+  geom_point() +
+  ylab("Life expectancy") +
+  ggtitle("Life Expectancy for each country over time")
+  
+
+```
+
+
+### Activity #3
+
+Compute some measure of life expectancy (mean? median? min? max?) for all possible combinations of continent and year. Reshape that to have one row per year and one variable for each continent. Or the other way around: one row per continent and one variable per year.
+Use knitr::kable() to make these tables look pretty in your rendered homework.
+Is there a plot that is easier to make with the data in this shape versis the usual form? If so (or you think so), try it! Reflect.
+
+
+```{r act3, warning=FALSE}
+df3 <- gapminder %>% select(year, lifeExp, continent) %>% distinct() %>% group_by(year,continent) %>% summarize(avg_lifeExp=mean(lifeExp))
+
+## pre-reshaping:
+df3 %>% knitr::kable(format="markdown",align=c(rep('c',times=7)), padding=2)
+
+df4 <- df3 %>% gather(key = "Measure", value = "Units", year:continent)
+
+```
+
+
+```{r, warning=FALSE}
+## post reshaping
+df4 %>% knitr::kable(format="markdown",align=c(rep('c',times=7)), padding=2)
+
+## range of average life expectancies found for each year and on each continent
+df4 %>% 
+    ggplot(aes(x = avg_lifeExp, y = Units, colour=Measure)) + 
+    geom_line() + 
+    ylab("Average life expectancy") +
+    xlab("Average life expectancy") + 
+    ggtitle("Range of average life expectancy for each year and for each continent")
+```
+
+
+
+
+### The plot above would be difficult to do with the original data without reshaping since it would be impossible to plot the range of data for each year and continent on the same plot. 
+
+With the original data, the only natural plot to do would be looking at the life expectancy values over time, each line coloured by the continent.
+
+```{r,warning=FALSE}
+df3 %>% ggplot(aes(x = year, y = avg_lifeExp, colour=continent)) + 
+    geom_line() +
+    ylab("Average life expectancy") +
+    ggtitle("Average life expectancy over time for each continent")
+    
+
+```
+
+
+## Join, merge, look up
+
+### Activity #1
+
+Create a second data frame, complementary to Gapminder. Join this with (part of) Gapminder using a dplyr join function and make some observations about the process and result. Explore the different types of joins. 
+
+
+  - Create a second data frame called "hemisphere" of all continents, and whether it is in sourthern or northern hemisphere. Modify the original gapminder dataframe such that the new table only contains information about the average life expectancy for each continent. This is so that it would be easier to observe/compare output of various `join()` functions.
+
+
+```{r,warning=FALSE, message=FALSE}
+## create "hemisphere" data frame
+
+hemisphere <- gapminder %>% 
+              select(continent) %>% 
+              distinct()  %>% 
+              mutate(hemisphere=c("Northern","Northern","Southern and Northern","Southern and Northern","Southern and Northern"))
+
+## create "gapminder_avg_lifeExp" data frame
+gapminder_avg_lifeExp <- gapminder %>% 
+                          group_by(continent) %>% 
+                          summarize(avg_lifeExp=mean(lifeExp))
+
+```
+
+
+  - Join hemisphere with gapminder average life expectancy (while keeping all of hemisphere information) by matching using continent: Use `left_join()`
+
+```{r, warning=FALSE, message=FALSE}
+hemisphere_info_leftjoin <- gapminder_avg_lifeExp %>% left_join(hemisphere)
+
+dim(hemisphere_info_leftjoin)
+
+hemisphere_info_leftjoin %>% knitr::kable(format="markdown",align=c(rep('c',times=7)), padding=2)
+
+
+```
+
+## Exploring other types of joins with the data frames above
+
+  - `inner_join()` would include rows that appear in both gapminder_avg_lifeExp and hemisphere, and returns all columns from both data set.
+
+```{r,warning=FALSE, message=FALSE}
+hemisphere_info_rightjoin <- gapminder_avg_lifeExp %>% inner_join(hemisphere) 
+
+dim(hemisphere_info_rightjoin)
+
+hemisphere_info_rightjoin %>% knitr::kable(format="markdown",align=c(rep('c',times=7)), padding=2)
+```
+
+
+  - `full_join()` returns all rows and all columns from both gapminder and hemisphere. Where there are not matching values, returns NA for the one missing.
+
+
+```{r, warning=FALSE, message=FALSE}
+hemisphere_info_fulljoin <- gapminder_avg_lifeExp %>% full_join(hemisphere) 
+
+dim(hemisphere_info_fulljoin)
+
+hemisphere_info_fulljoin %>% knitr::kable(format="markdown",align=c(rep('c',times=7)), padding=2)
+```
+
+
+
+  - `anti_join()` outputs an empty table since gapminder and hemisphere share the same continents. This function returns all rows from gapminder where there are not matching values in hemisphere, keeping just columns from x. 
+
+```{r, warning=FALSE, message=FALSE}
+hemisphere_info_antijoin <- gapminder_avg_lifeExp %>% anti_join(hemisphere) 
+
+dim(hemisphere_info_antijoin)
+
+hemisphere_info_antijoin %>% knitr::kable(format="markdown",align=c(rep('c',times=7)), padding=2)
+```
+
+
+  - `semi_join()` Return all rows from gapminder where there are matching values in hemisphere, keeping just columns from gapminder.
+
+```{r, warning=FALSE, message=FALSE}
+hemisphere_info_semijoin <- gapminder_avg_lifeExp %>% semi_join(hemisphere) 
+
+dim(hemisphere_info_semijoin)
+
+hemisphere_info_semijoin %>% knitr::kable(format="markdown",align=c(rep('c',times=7)), padding=2)
+
+```
+
+
+
+### Explore the base function merge(), which also does joins. Compare and contrast with dplyr joins
+
+  - compare `merge()` with `join()` functions: `merge(x,y,all=TRUE)` achieves the same effect as a `full_join()`. 
+
+
+```{r}
+
+merged <- merge(gapminder_avg_lifeExp,hemisphere, all=TRUE)
+
+dim(merged)
+
+merged %>% knitr::kable(format="markdown",align=c(rep('c',times=7)), padding=2)
+```
+
+
+### Resources:
+
+https://github.com/tidyverse/dplyr/issues/1150
+
+http://stat545.com/bit001_dplyr-cheatsheet.html#semi_joinsuperheroes-publishers
+
+
