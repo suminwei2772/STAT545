@@ -406,5 +406,5 @@ Use ggsave() to explicitly save a plot to file. Load and embed it in your report
 Arguments of ggsave(), such as width, height, resolution or text scaling. Various graphics devices, e.g. a vector vs. raster format. Explicit provision of the plot object p via ggsave(..., plot = p). Show a situation in which this actually matters.
 
 ``` r
-#![](./Images/g1.png)
+![](./Images/g1.png)
 ```
