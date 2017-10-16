@@ -37,7 +37,10 @@ Below are **links** to my reponses for weekly homework assignments:
   + [README.md for hw04](/hw04/README.md)
   + [hw04_tidy_data_and_joints.md](/hw04/hw04_tidy_data_and_joins.md): Explores the Gapminder dataset with reshaping and various `join()` functions
   
-
+* Homework 5 (October 17, 2017)
+  + [README.md for hw05](/hw05/README.md)
+  + [hw05_factor_figure_management.md](/hw05/hw05_factor_figure_management.md): Explores the singer dataset by performing factor re-leveling and re-ordering, modifying ggplot images, saving/reading in files/images
+  
 ## Answers to questions posted for hw01 regarding providing a description of how this README.md file was written
 
 - [x] Include a description of how you got the changes into README.md on GitHub.
