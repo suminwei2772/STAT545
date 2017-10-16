@@ -1,0 +1,248 @@
+---
+title: "hw05_factor_figure_management"
+author: "Lisa Wei"
+date: '2017-10-15'
+output: github_document
+---
+
+```{r setup, message=FALSE, warning=FALSE}
+library(singer)
+library(tidyverse)
+library(dplyr)
+library(forcats)
+library(readr)
+library(readxl)
+```
+
+
+## Task 1: Factor management
+
+### Singer version:
+Factorise. Transform some of the variable in the singer_locations dataframe into factors: pay attention at what levels you introduce and their order. Try and consider the difference between the base R as.factor and the forcats-provided functions.
+
+```{r singer_factor, message=FALSE, warning=FALSE}
+
+data("singer_locations")
+
+#track_id and title are originally of type "character"
+typeof(singer::singer_locations$track_id)
+typeof(singer::singer_locations$title)
+
+## transform into factor
+sl <- singer_locations %>% mutate(artist_name_factor = as_factor(artist_name), title_factor = as_factor(title))   ### as_factor() is safer
+glimpse(sl)
+
+## can't convert "integer" to "factor"
+# as_factor(sl$year) outputs an error
+
+head(sl$artist_name_factor)
+head(sl$title_factor)
+```
+
+
+### Drop 0. 
+Filter the singer_locations data to remove observations associated with the incorrect input year 0. Additionally, remove unused factor levels. Provide concrete information on the data before and after removing these rows and levels; address the number of rows and the levels of the affected factors.
+
+
+```{r drop0, message=FALSE, warning=FALSE}
+
+sl_year0_dropped <- sl %>% 
+  mutate(year_drop0 = ifelse(year==0,"drop0",year))  %>% filter(year_drop0!="drop0")
+
+glimpse(sl_year0_dropped)
+
+## 100 instances of year==0
+which(sl$year_drop0=="drop0")
+
+dim(sl)
+dim(sl_year0_dropped)
+```
+
+#### Dropping unused factor levels in a data frame
+
+`droplevels()` operates on all the factors in a data frame or on a single factor
+
+```{r drop_unused_levels, message=FALSE, warning=FALSE}
+sl_year0_unused_levels_dropped <- sl_year0_dropped %>% 
+  droplevels()
+
+nlevels(sl_year0_dropped$artist_name_factor)
+nlevels(sl_year0_unused_levels_dropped$artist_name_factor)
+
+nlevels(sl_year0_dropped$title_factor)
+nlevels(sl_year0_unused_levels_dropped$title_factor)
+
+```
+
+
+
+### Reorder the levels of year, artist_name or title. 
+Use the forcats package to change the order of the factor levels, based on a principled summary of one of the quantitative variables. Consider experimenting with a summary statistic beyond the most basic choice of the median.
+
+
+Order artist_name_factor and artist_title_factor by the maximum duration (in descending order)
+
+```{r}
+sl_year0_unused_levels_dropped$title_factor %>% levels() %>% head()
+
+## order according to minimum year instead of median
+fct_reorder(sl_year0_unused_levels_dropped$title_factor, sl_year0_unused_levels_dropped$duration, max,.desc = TRUE) %>% 
+  levels() %>% 
+  head()
+
+
+```
+
+
+### Characterize the (derived) data before and after your factor re-leveling.
+
+Explore the effects of arrange(). Does merely arranging the data have any effect on, say, a figure?
+Explore the effects of reordering a factor and factor reordering coupled with arrange(). Especially, what effect does this have on a figure?
+
+
+Re-ordering would change the order in which the points are plotted on the graph. `arrange()` would not change the order, whether or not it is used with re-ordering.
+
+
+```{r plots, message=FALSE, warning=FALSE}
+## filter data to only look at titles with duration >1000 otherwise plot is too cluttered
+## using arrange() only
+sl_year0_unused_levels_dropped %>% 
+  arrange(duration) %>% 
+  filter(duration>1000) %>%
+  ggplot(aes(x=duration,y=title_factor)) + 
+  geom_point()
+
+sl_year0_unused_levels_dropped %>% 
+  arrange(duration) %>% 
+  filter(duration>1000) %>%
+  ggplot(aes(x=duration,y=artist_name_factor)) + 
+  geom_point()
+
+## using re-ordering of levels
+sl_year0_unused_levels_dropped %>%
+  filter(duration>1000) %>%
+  ggplot(aes(x=duration,y=fct_reorder(title_factor,duration,.desc=TRUE))) + 
+  geom_point()
+
+sl_year0_unused_levels_dropped %>% 
+  filter(duration>1000) %>%
+  ggplot(aes(x=duration,y=fct_reorder(artist_name_factor,duration,.desc=TRUE))) + 
+  geom_point()
+
+## using re-ordering levels and arrange
+sl_year0_unused_levels_dropped %>% 
+  arrange(duration) %>% 
+  filter(duration>1000) %>%
+  ggplot(aes(x=duration,y=fct_reorder(title_factor,duration,.desc=TRUE))) + 
+  geom_point()
+
+sl_year0_unused_levels_dropped %>% 
+  arrange(duration) %>% 
+  filter(duration>1000) %>%
+  ggplot(aes(x=duration,y=fct_reorder(artist_name_factor,duration,.desc=TRUE))) + 
+  geom_point()
+
+```
+
+
+
+### File I/O
+Experiment with one or more of write_csv()/read_csv() (and/or TSV friends), saveRDS()/readRDS(),  dput()/dget(). Create something new, probably by filtering or grouped-summarization of Singer or Gapminder. I highly recommend you fiddle with the factor levels, i.e. make them non-alphabetical (see previous section). Explore whether this survives the round trip of writing to file then reading back in.
+
+
+```{r}
+## re-order data frame by maximum duration
+## summaerise by maximum duration for each unique combination of title and artist name
+
+sl_year0_unused_levels_dropped$title_factor <- fct_reorder(sl_year0_unused_levels_dropped$title_factor, sl_year0_unused_levels_dropped$duration, max, .desc = TRUE)
+
+duration_summary <- sl_year0_unused_levels_dropped %>% group_by(title_factor,artist_name_factor) %>% summarise(max_duration=max(duration))
+
+readr::write_csv(duration_summary,"duration_summary.csv")
+readr::read_csv("duration_summary.csv")
+
+
+saveRDS(duration_summary, "duration_summary.rds")
+readRDS("duration_summary.rds")
+
+dput(duration_summary, "duration_summary-dput.txt")
+duration_summary_exp_dget <- dget("duration_summary-dput.txt")
+duration_summary_exp_dget
+
+```
+
+### Visualization design
+
+Remake at least one figure or create a new one, in light of something you learned in the recent class meetings about visualization design and color. Maybe juxtapose your first attempt and what you obtained after some time spent working on it. Reflect on the differences. If using Gapminder, you can use the country or continent color scheme that ships with Gapminder. 
+
+
+#### Data reshaping and re-ordering can make 
+
+-Reshaping data can allow you to juxtapose multiple variables in order to compare them
+-Re-ordering by year will organize the points in sequential order
+
+```{r}
+## without reshaping
+hfd_y <- singer_locations %>% select(year, artist_hotttnesss, artist_familiarity, duration)
+## applying reshaping
+hfd_y_long <- hfd_y %>% gather(key = "Measure", value = "Units", duration:artist_hotttnesss)
+#hfd_y_long$title_factor <- as_factor(hfd_y_long$title)
+
+## or facet
+
+hfd_y_long %>% 
+    #filter(year>1900) %>%
+    #fct_reorder(title_factor) %>%
+    ggplot(aes(x = year, y = Units, colour=Measure)) + 
+    geom_point() + 
+    facet_wrap(~Measure,scales = "free") +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+
+## Apply lumping to group data into 10 groups based on top artist names
+
+sl %>%   # fct_lummp from forcats (lump cata) into 10 groups
+  mutate(top_artist_names = fct_lump(artist_name_factor, n=7)) %>%
+  select(year, top_artist_names, artist_hotttnesss, artist_familiarity, duration) %>%
+  gather(key = "Measure", value = "Units", duration:artist_hotttnesss) %>%
+  ggplot(aes(x=fct_reorder(top_artist_names,year),y=Units, color=top_artist_names)) +
+  geom_point() +
+  facet_wrap(~Measure, scales="free") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+
+## lets get rid of the "other" group since it's not showing anything informative and just focus on the top 10 artists
+## reorder factors based on EACH MEASURE
+
+g1 <- sl_year0_unused_levels_dropped %>%   # fct_lummp from forcats (lump cata)
+  mutate(top_artist_names = fct_lump(artist_name_factor, n=7)) %>%
+  select(year, top_artist_names, artist_hotttnesss, artist_familiarity, duration) %>%
+  gather(key = "Measure", value = "Units", duration:artist_hotttnesss) %>%
+  filter(top_artist_names != "Other") %>%
+  ggplot(aes(x=fct_reorder(top_artist_names,year),y=Units, color=top_artist_names)) +
+  geom_point() +
+  facet_wrap(~Measure, scales="free") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  
+g1
+
+ggsave("g1.png", width=20, height=10, units="cm")
+
+```
+
+
+### Writing figures to file
+Use ggsave() to explicitly save a plot to file. Load and embed it in your report. You can play around with various options, such as:
+
+Arguments of ggsave(), such as width, height, resolution or text scaling.
+Various graphics devices, e.g. a vector vs. raster format.
+Explicit provision of the plot object p via ggsave(..., plot = p). Show a situation in which this actually matters.
+
+```{r}
+
+#![Reshaped singer ggplot.](./g1.png)
+
+
+```
+
+
