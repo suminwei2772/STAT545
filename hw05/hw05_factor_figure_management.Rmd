@@ -226,7 +226,7 @@ g1 <- sl_year0_unused_levels_dropped %>%   # fct_lummp from forcats (lump cata)
   
 g1
 
-ggsave("g1.png", width=20, height=10, units="cm")
+ggsave("./Images/g1.png", width=20, height=10, units="cm")
 
 ```
 
@@ -240,7 +240,7 @@ Explicit provision of the plot object p via ggsave(..., plot = p). Show a situat
 
 ```{r}
 
-#![Reshaped singer ggplot.](./g1.png)
+#![](./Images/g1.png)
 
 
 ```

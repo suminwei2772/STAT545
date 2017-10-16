@@ -396,7 +396,7 @@ g1
 ![](hw05_factor_figure_management_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-3-3.png)
 
 ``` r
-ggsave("g1.png", width=20, height=10, units="cm")
+ggsave("./Images/g1.png", width=20, height=10, units="cm")
 ```
 
 ### Writing figures to file
@@ -406,5 +406,5 @@ Use ggsave() to explicitly save a plot to file. Load and embed it in your report
 Arguments of ggsave(), such as width, height, resolution or text scaling. Various graphics devices, e.g. a vector vs. raster format. Explicit provision of the plot object p via ggsave(..., plot = p). Show a situation in which this actually matters.
 
 ``` r
-#![Reshaped singer ggplot.](./g1.png)
+#![](./Images/g1.png)
 ```
