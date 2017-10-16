@@ -2,7 +2,7 @@
 
 # Table of Contents
 - [Introduction](#introduction)
-- [Course Material](#Course Material)
+- [Course Material](#course-material)
 
 ## Introduction   
 
