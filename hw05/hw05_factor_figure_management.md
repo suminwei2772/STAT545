@@ -87,6 +87,8 @@ Filter the singer\_locations data to remove observations associated with the inc
 sl_year0_dropped <- sl %>% 
   mutate(year_drop0 = ifelse(year==0,"drop0",year))  %>% filter(year_drop0!="drop0")
 
+## 100 instances of year==0
+
 glimpse(sl_year0_dropped)
 ```
 
@@ -111,7 +113,6 @@ glimpse(sl_year0_dropped)
     ## $ year_drop0         <chr> "2007", "2004", "1998", "1995", "1968", "20...
 
 ``` r
-## 100 instances of year==0
 which(sl$year_drop0=="drop0")
 ```
 
@@ -190,67 +191,93 @@ Explore the effects of arrange(). Does merely arranging the data have any effect
 
 Re-ordering would change the order in which the points are plotted on the graph. `arrange()` would not change the order, whether or not it is used with re-ordering.
 
+filter data to only look at titles with duration &gt;1000 otherwise plot is too cluttered
+-----------------------------------------------------------------------------------------
+
+using arrange() only
+--------------------
+
 ``` r
-## filter data to only look at titles with duration >1000 otherwise plot is too cluttered
-## using arrange() only
 sl_year0_unused_levels_dropped %>% 
   arrange(duration) %>% 
   filter(duration>1000) %>%
   ggplot(aes(x=duration,y=title_factor)) + 
-  geom_point()
+  geom_point() +
+  ggtitle("Title versus duration by arranging data based on duration") +
+  ylab("Title") +
+  xlab("Duration")
 ```
 
-![](hw05_factor_figure_management_files/figure-markdown_github-ascii_identifiers/plots-1.png)
+![](hw05_factor_figure_management_files/figure-markdown_github-ascii_identifiers/plot1-1.png)
 
 ``` r
 sl_year0_unused_levels_dropped %>% 
   arrange(duration) %>% 
   filter(duration>1000) %>%
   ggplot(aes(x=duration,y=artist_name_factor)) + 
-  geom_point()
+  geom_point() +
+  ggtitle("Artist name versus duration by arranging data based on duration") +
+  ylab("Artist name") +
+  xlab("Duration")
 ```
 
-![](hw05_factor_figure_management_files/figure-markdown_github-ascii_identifiers/plots-2.png)
+![](hw05_factor_figure_management_files/figure-markdown_github-ascii_identifiers/plot2-1.png)
+
+using re-ordering of levels
+---------------------------
 
 ``` r
-## using re-ordering of levels
 sl_year0_unused_levels_dropped %>%
   filter(duration>1000) %>%
   ggplot(aes(x=duration,y=fct_reorder(title_factor,duration,.desc=TRUE))) + 
-  geom_point()
+  geom_point() +
+  ggtitle("Title (reordered based on duration) versus duration") +
+  ylab("Title") +
+  xlab("Duration")
 ```
 
-![](hw05_factor_figure_management_files/figure-markdown_github-ascii_identifiers/plots-3.png)
+![](hw05_factor_figure_management_files/figure-markdown_github-ascii_identifiers/plot3-1.png)
 
 ``` r
 sl_year0_unused_levels_dropped %>% 
   filter(duration>1000) %>%
   ggplot(aes(x=duration,y=fct_reorder(artist_name_factor,duration,.desc=TRUE))) + 
-  geom_point()
+  geom_point() +
+  ggtitle("Artist name (reordered based on duration) versus duration") +
+  ylab("Artist name") +
+  xlab("Duration")
 ```
 
-![](hw05_factor_figure_management_files/figure-markdown_github-ascii_identifiers/plots-4.png)
+![](hw05_factor_figure_management_files/figure-markdown_github-ascii_identifiers/plot4-1.png)
+
+using re-ordering levels and arrange
+------------------------------------
 
 ``` r
-## using re-ordering levels and arrange
 sl_year0_unused_levels_dropped %>% 
   arrange(duration) %>% 
   filter(duration>1000) %>%
   ggplot(aes(x=duration,y=fct_reorder(title_factor,duration,.desc=TRUE))) + 
-  geom_point()
+  geom_point() +
+  ggtitle("Title versus duration by applying arrange and reordering") +
+  ylab("Title") +
+  xlab("Duration")
 ```
 
-![](hw05_factor_figure_management_files/figure-markdown_github-ascii_identifiers/plots-5.png)
+![](hw05_factor_figure_management_files/figure-markdown_github-ascii_identifiers/plot5-1.png)
 
 ``` r
 sl_year0_unused_levels_dropped %>% 
   arrange(duration) %>% 
   filter(duration>1000) %>%
   ggplot(aes(x=duration,y=fct_reorder(artist_name_factor,duration,.desc=TRUE))) + 
-  geom_point()
+  geom_point() +
+  ggtitle("Artist name versus duration by arranging and reordering") +
+  ylab("Artist name") +
+  xlab("Duration")
 ```
 
-![](hw05_factor_figure_management_files/figure-markdown_github-ascii_identifiers/plots-6.png)
+![](hw05_factor_figure_management_files/figure-markdown_github-ascii_identifiers/plot6-1.png)
 
 ### File I/O
 
@@ -341,6 +368,8 @@ Remake at least one figure or create a new one, in light of something you learne
 
 -Reshaping data can allow you to juxtapose multiple variables in order to compare them -Re-ordering by year will organize the points in sequential order
 
+#### Applying reshaping and faceting
+
 ``` r
 ## without reshaping
 hfd_y <- singer_locations %>% select(year, artist_hotttnesss, artist_familiarity, duration)
@@ -356,14 +385,16 @@ hfd_y_long %>%
     ggplot(aes(x = year, y = Units, colour=Measure)) + 
     geom_point() + 
     facet_wrap(~Measure,scales = "free") +
-    theme(axis.text.x = element_text(angle = 90, hjust = 1))
+    theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+    ggtitle("Artist familiarity, hotness, and song duration over time") +
+    xlab("Top artist names")
 ```
 
 ![](hw05_factor_figure_management_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-3-1.png)
 
-``` r
-## Apply lumping to group data into 10 groups based on top artist names
+#### Apply lumping to group data into 10 groups based on top artist names and reorder the top artist names factor by year
 
+``` r
 sl %>%   # fct_lummp from forcats (lump cata) into 10 groups
   mutate(top_artist_names = fct_lump(artist_name_factor, n=7)) %>%
   select(year, top_artist_names, artist_hotttnesss, artist_familiarity, duration) %>%
@@ -371,15 +402,16 @@ sl %>%   # fct_lummp from forcats (lump cata) into 10 groups
   ggplot(aes(x=fct_reorder(top_artist_names,year),y=Units, color=top_artist_names)) +
   geom_point() +
   facet_wrap(~Measure, scales="free") +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  ggtitle("Artist familiarity, hotness, and song duration for top artists and other artists") +
+  xlab("Top artist names and Other")
 ```
 
-![](hw05_factor_figure_management_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-3-2.png)
+![](hw05_factor_figure_management_files/figure-markdown_github-ascii_identifiers/lumping-1.png)
+
+#### Lets get rid of the "other" group since it's not showing anything informative and just focus on the top 10 artists
 
 ``` r
-## lets get rid of the "other" group since it's not showing anything informative and just focus on the top 10 artists
-## reorder factors based on EACH MEASURE
-
 g1 <- sl_year0_unused_levels_dropped %>%   # fct_lummp from forcats (lump cata)
   mutate(top_artist_names = fct_lump(artist_name_factor, n=7)) %>%
   select(year, top_artist_names, artist_hotttnesss, artist_familiarity, duration) %>%
@@ -388,16 +420,20 @@ g1 <- sl_year0_unused_levels_dropped %>%   # fct_lummp from forcats (lump cata)
   ggplot(aes(x=fct_reorder(top_artist_names,year),y=Units, color=top_artist_names)) +
   geom_point() +
   facet_wrap(~Measure, scales="free") +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  ggtitle("Artist familiarity, hotness, and song duration for top artists") +
+  xlab("Top artist names")
   
 g1
 ```
 
-![](hw05_factor_figure_management_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-3-3.png)
+![](hw05_factor_figure_management_files/figure-markdown_github-ascii_identifiers/others_gone-1.png)
 
 ``` r
-ggsave("./Images/g1.png", width=20, height=10, units="cm", plot=g1)
+ggsave("g1.png", width=20, height=10, units="cm", plot=g1)
 ```
+
+##### Note: It is very important to specify `plot` in `ggsave` if you have previously printed/made more than 1 plot. For instance, if I were to make another `ggplot` and assigned that to `g2`, then when I do run `ggsave` it is probably best practice to specify `plot=g2` or `plot=g1` so that there is no confusion as to which plot will be saved.
 
 ### Writing figures to file
 
@@ -408,3 +444,19 @@ Arguments of ggsave(), such as width, height, resolution or text scaling. Variou
 Below is the plot that was generated by `ggsave()` and read back in using `![plot](g1.png)`
 
 ![plot](g1.png)
+
+### Report your process
+
+Reflect on what was hard/easy, problems you solved, helpful tutorials you read, etc.
+
+1.  Reading in a `png` file: I didn't know that the code for bringing a plot in should not be part of an R code chunk. When I included `![plot](g1.png)` inside R chunks, I always ran into errors and couldn't render the Markdown file.
+
+2.  I couldn't figure out how to convert a variable originally of type `integer` into type `factor`. For instance, for the `singer_locations` dataset, I tried to convert `year` into a factor but always ran into errors. Specfically, `as_factor(sl$year)` outputs an error. Can we usually convert numbers/integers into factors in R?
+
+### Resources:
+
+1.  Table of contents: <https://github.com/jonschlinkert/markdown-toc/edit/master/README.md>
+
+2.  Importing and exporting files: <http://stat545.com/block026_file-out-in.html>
+
+3.  Factors releveling: <http://stat545.com/block029_factors.html>

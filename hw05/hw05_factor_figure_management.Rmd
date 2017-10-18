@@ -49,9 +49,10 @@ Filter the singer_locations data to remove observations associated with the inco
 sl_year0_dropped <- sl %>% 
   mutate(year_drop0 = ifelse(year==0,"drop0",year))  %>% filter(year_drop0!="drop0")
 
+## 100 instances of year==0
+
 glimpse(sl_year0_dropped)
 
-## 100 instances of year==0
 which(sl$year_drop0=="drop0")
 
 dim(sl)
@@ -103,50 +104,89 @@ Explore the effects of reordering a factor and factor reordering coupled with ar
 Re-ordering would change the order in which the points are plotted on the graph. `arrange()` would not change the order, whether or not it is used with re-ordering.
 
 
-```{r plots, message=FALSE, warning=FALSE}
 ## filter data to only look at titles with duration >1000 otherwise plot is too cluttered
 ## using arrange() only
+
+```{r plot1, message=FALSE, warning=FALSE, fig.width=10, fit.height=10}
+
 sl_year0_unused_levels_dropped %>% 
   arrange(duration) %>% 
   filter(duration>1000) %>%
   ggplot(aes(x=duration,y=title_factor)) + 
-  geom_point()
+  geom_point() +
+  ggtitle("Title versus duration by arranging data based on duration") +
+  ylab("Title") +
+  xlab("Duration")
+```
 
+```{r plot2, message=FALSE, warning=FALSE, fig.width=10, fit.height=10}
 sl_year0_unused_levels_dropped %>% 
   arrange(duration) %>% 
   filter(duration>1000) %>%
   ggplot(aes(x=duration,y=artist_name_factor)) + 
-  geom_point()
+  geom_point() +
+  ggtitle("Artist name versus duration by arranging data based on duration") +
+  ylab("Artist name") +
+  xlab("Duration")
+```
+
 
 ## using re-ordering of levels
+
+```{r plot3, message=FALSE, warning=FALSE, fig.width=10, fit.height=10}
+
 sl_year0_unused_levels_dropped %>%
   filter(duration>1000) %>%
   ggplot(aes(x=duration,y=fct_reorder(title_factor,duration,.desc=TRUE))) + 
-  geom_point()
+  geom_point() +
+  ggtitle("Title (reordered based on duration) versus duration") +
+  ylab("Title") +
+  xlab("Duration")
+```
 
+
+```{r plot4, message=FALSE, warning=FALSE, fig.width=10, fit.height=10}
 sl_year0_unused_levels_dropped %>% 
   filter(duration>1000) %>%
   ggplot(aes(x=duration,y=fct_reorder(artist_name_factor,duration,.desc=TRUE))) + 
-  geom_point()
+  geom_point() +
+  ggtitle("Artist name (reordered based on duration) versus duration") +
+  ylab("Artist name") +
+  xlab("Duration")
+```
+
+
 
 ## using re-ordering levels and arrange
+
+```{r plot5, message=FALSE, warning=FALSE, fig.width=10, fit.height=10}
 sl_year0_unused_levels_dropped %>% 
   arrange(duration) %>% 
   filter(duration>1000) %>%
   ggplot(aes(x=duration,y=fct_reorder(title_factor,duration,.desc=TRUE))) + 
-  geom_point()
+  geom_point() +
+  ggtitle("Title versus duration by applying arrange and reordering") +
+  ylab("Title") +
+  xlab("Duration")
+```
 
+
+```{r plot6, message=FALSE, warning=FALSE, fig.width=10, fit.height=10}
 sl_year0_unused_levels_dropped %>% 
   arrange(duration) %>% 
   filter(duration>1000) %>%
   ggplot(aes(x=duration,y=fct_reorder(artist_name_factor,duration,.desc=TRUE))) + 
-  geom_point()
+  geom_point() +
+  ggtitle("Artist name versus duration by arranging and reordering") +
+  ylab("Artist name") +
+  xlab("Duration")
 
 ```
 
 
 
 ### File I/O
+
 Experiment with one or more of write_csv()/read_csv() (and/or TSV friends), saveRDS()/readRDS(),  dput()/dget(). Create something new, probably by filtering or grouped-summarization of Singer or Gapminder. I highly recommend you fiddle with the factor levels, i.e. make them non-alphabetical (see previous section). Explore whether this survives the round trip of writing to file then reading back in.
 
 
@@ -171,6 +211,7 @@ duration_summary_exp_dget
 
 ```
 
+
 ### Visualization design
 
 Remake at least one figure or create a new one, in light of something you learned in the recent class meetings about visualization design and color. Maybe juxtapose your first attempt and what you obtained after some time spent working on it. Reflect on the differences. If using Gapminder, you can use the country or continent color scheme that ships with Gapminder. 
@@ -180,6 +221,9 @@ Remake at least one figure or create a new one, in light of something you learne
 
 -Reshaping data can allow you to juxtapose multiple variables in order to compare them
 -Re-ordering by year will organize the points in sequential order
+
+
+#### Applying reshaping and faceting
 
 ```{r}
 ## without reshaping
@@ -196,11 +240,16 @@ hfd_y_long %>%
     ggplot(aes(x = year, y = Units, colour=Measure)) + 
     geom_point() + 
     facet_wrap(~Measure,scales = "free") +
-    theme(axis.text.x = element_text(angle = 90, hjust = 1))
+    theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+    ggtitle("Artist familiarity, hotness, and song duration over time") +
+    xlab("Top artist names")
+    
+```
 
 
-## Apply lumping to group data into 10 groups based on top artist names
+#### Apply lumping to group data into 10 groups based on top artist names and reorder the top artist names factor by year
 
+```{r lumping, warning=FALSE, message=FALSE}
 sl %>%   # fct_lummp from forcats (lump cata) into 10 groups
   mutate(top_artist_names = fct_lump(artist_name_factor, n=7)) %>%
   select(year, top_artist_names, artist_hotttnesss, artist_familiarity, duration) %>%
@@ -208,12 +257,15 @@ sl %>%   # fct_lummp from forcats (lump cata) into 10 groups
   ggplot(aes(x=fct_reorder(top_artist_names,year),y=Units, color=top_artist_names)) +
   geom_point() +
   facet_wrap(~Measure, scales="free") +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  ggtitle("Artist familiarity, hotness, and song duration for top artists and other artists") +
+  xlab("Top artist names and Other")
+```
 
 
-## lets get rid of the "other" group since it's not showing anything informative and just focus on the top 10 artists
-## reorder factors based on EACH MEASURE
+#### Lets get rid of the "other" group since it's not showing anything informative and just focus on the top 10 artists
 
+```{r others_gone, message=FALSE, warning=FALSE}
 g1 <- sl_year0_unused_levels_dropped %>%   # fct_lummp from forcats (lump cata)
   mutate(top_artist_names = fct_lump(artist_name_factor, n=7)) %>%
   select(year, top_artist_names, artist_hotttnesss, artist_familiarity, duration) %>%
@@ -222,13 +274,18 @@ g1 <- sl_year0_unused_levels_dropped %>%   # fct_lummp from forcats (lump cata)
   ggplot(aes(x=fct_reorder(top_artist_names,year),y=Units, color=top_artist_names)) +
   geom_point() +
   facet_wrap(~Measure, scales="free") +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  ggtitle("Artist familiarity, hotness, and song duration for top artists") +
+  xlab("Top artist names")
   
 g1
 
-ggsave("./Images/g1.png", width=20, height=10, units="cm", plot=g1)
+ggsave("g1.png", width=20, height=10, units="cm", plot=g1)
 
 ```
+
+##### Note: It is very important to specify `plot` in `ggsave` if you have previously printed/made more than 1 plot. For instance, if I were to make another `ggplot` and assigned that to `g2`, then when I do run `ggsave` it is probably best practice to specify `plot=g2` or `plot=g1` so that there is no confusion as to which plot will be saved.
+
 
 
 ### Writing figures to file
@@ -242,8 +299,27 @@ Below is the plot that was generated by `ggsave()` and read back in using `![plo
 
 ![plot](g1.png)
 
-```{r}
 
-```
+
+### Report your process
+
+Reflect on what was hard/easy, problems you solved, helpful tutorials you read, etc. 
+
+1. Reading in a `png` file: I didn't know that the code for bringing a plot in should not be part of an R code chunk. When I included `![plot](g1.png)` inside R chunks, I always ran into errors and couldn't render the Markdown file.
+
+2. I couldn't figure out  how to convert a variable originally of type `integer` into type `factor`. For instance, for the `singer_locations` dataset, I tried to convert `year` into a factor but always ran into errors. Specfically, `as_factor(sl$year)` outputs an error. Can we usually convert numbers/integers into factors in R?
+
+
+
+### Resources:
+
+1. Table of contents: https://github.com/jonschlinkert/markdown-toc/edit/master/README.md 
+
+2. Importing and exporting files: http://stat545.com/block026_file-out-in.html
+
+3. Factors releveling: http://stat545.com/block029_factors.html
+
+
+
 
 
