@@ -1,4 +1,4 @@
-hw05\_factor\_figure\_management
+hw05 Factor and Figure Management
 ================
 Lisa Wei
 2017-10-15

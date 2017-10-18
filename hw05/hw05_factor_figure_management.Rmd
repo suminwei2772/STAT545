@@ -1,5 +1,5 @@
 ---
-title: "hw05_factor_figure_management"
+title: "hw05 Factor and Figure Management"
 author: "Lisa Wei"
 date: '2017-10-15'
 output: github_document
