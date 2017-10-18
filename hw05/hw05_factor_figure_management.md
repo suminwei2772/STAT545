@@ -87,8 +87,17 @@ Filter the singer\_locations data to remove observations associated with the inc
 sl_year0_dropped <- sl %>% 
   mutate(year_drop0 = ifelse(year==0,"drop0",year))  %>% filter(year_drop0!="drop0")
 
-## 100 instances of year==0
+## number of instances of year==0 is 100
+sl %>% 
+  mutate(year_drop0 = ifelse(year==0,"drop0",year))  %>% filter(year_drop0=="drop0") %>% count()
+```
 
+    ## # A tibble: 1 x 1
+    ##       n
+    ##   <int>
+    ## 1   100
+
+``` r
 glimpse(sl_year0_dropped)
 ```
 
@@ -113,18 +122,14 @@ glimpse(sl_year0_dropped)
     ## $ year_drop0         <chr> "2007", "2004", "1998", "1995", "1968", "20...
 
 ``` r
-which(sl$year_drop0=="drop0")
-```
-
-    ## integer(0)
-
-``` r
+## before filtering year==0
 dim(sl)
 ```
 
     ## [1] 10100    16
 
 ``` r
+## after filtering year==0
 dim(sl_year0_dropped)
 ```
 
@@ -138,24 +143,28 @@ dim(sl_year0_dropped)
 sl_year0_unused_levels_dropped <- sl_year0_dropped %>% 
   droplevels()
 
+## before dropping unused artist name factor levels
 nlevels(sl_year0_dropped$artist_name_factor)
 ```
 
     ## [1] 7498
 
 ``` r
+## after dropping unused factor levels
 nlevels(sl_year0_unused_levels_dropped$artist_name_factor)
 ```
 
     ## [1] 7408
 
 ``` r
+## before dropping unused title factor levels
 nlevels(sl_year0_dropped$title_factor)
 ```
 
     ## [1] 9799
 
 ``` r
+## after dropping unused factor levels
 nlevels(sl_year0_unused_levels_dropped$title_factor)
 ```
 
