@@ -41,6 +41,10 @@ Below are **links** to my reponses for weekly homework assignments:
   + [README.md for hw05](/hw05/README.md)
   + [hw05_factor_figure_management.md](/hw05/hw05_factor_figure_management.md): Explores the singer dataset by performing factor re-leveling and re-ordering, modifying ggplot images, saving/reading in files/images
   
+* Homework 6 (November 8, 2017)
+  + [README.md for hw06](/hw06/README.md)
+  + [hw06_data_wrangling.md](hw06_data_wrangling.md): Explores writing functions and using `map()` to pull out certain subsets of a list, and using different operations to apply a function to a nested data frame.
+  
 ## Answers to questions posted for hw01 regarding providing a description of how this README.md file was written
 
 - [x] Include a description of how you got the changes into README.md on GitHub.
