@@ -32,10 +32,14 @@ knitr::kable(head(en_words, n=100))
 ```
 
 
-Step 2: Lengths of each words was calculated
+Step 2: Lengths of each words were calculated. Then, the number of words that started with each letter in the alphabet was counted.
 
 ```{r en_words_length, warning=FALSE}
 word_length <- data.frame(apply(en_words, 1, nchar)); colnames(word_length) <- c("Length"); rownames(word_length) <- NULL
+
+en_words$start <- data.frame(do.call('rbind', strsplit(en_words$Words,'',fixed=TRUE)))[,1]
+word_starts <- en_words %>% group_by(start) %>% count()
+
 ```
 
 
@@ -48,10 +52,20 @@ knitr::kable(head(word_length, n=100))
 # en <- read_tsv("words_length.txt", col_names="Length")
 ```
 
-Step 3: Drawing a graph - a histogram of the distribution of the lengths of the English words.
+Below is the number of words that starts with each letter of the alphabet.
+
+```{r table_starts, warning=FALSE}
+knitr::kable(word_starts)
+
+```
+
+Step 3: Drawing graphs - a histogram of the distribution of the lengths of the English words and a bar graph showing the number of words that started with each letter in the alphabet.
 
 ![plot](length_distribution.png)
 
+What we notice in the graph below is that words that start with "d" and "s" are the greatest in number.
+
+![plot](n_starts.png)
 
 
 
