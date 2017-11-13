@@ -1,0 +1,1 @@
+download.file("http://www-01.sil.org/linguistics/wordlists/english/wordlist/wordsEn.txt", destfile="words.en.crlf.txt")
