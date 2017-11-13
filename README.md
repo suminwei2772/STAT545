@@ -43,7 +43,15 @@ Below are **links** to my reponses for weekly homework assignments:
   
 * Homework 6 (November 8, 2017)
   + [README.md for hw06](/hw06/README.md)
-  + [hw06_data_wrangling.md](hw06_data_wrangling.md): Explores writing functions and using `map()` to pull out certain subsets of a list, and using different operations to apply a function to a nested data frame.
+  + [hw06_data_wrangling.md](/hw06/hw06_data_wrangling.md): Explores writing functions and using `map()` to pull out certain subsets of a list, and using different operations to apply a function to a nested data frame.
+ 
+
+* Homework 7 (November 14, 2017)
+  + [README.md for hw07](/hw07/README.md)
+  + [hw07_make.md](/hw07/hw07_make.md): is the final report which shows the distribution of word lengths and the number of words that start with each letter in the alphabet.
+  
+ 
+ 
   
 ## Answers to questions posted for hw01 regarding providing a description of how this README.md file was written
 
