@@ -9,7 +9,7 @@
 
 2. Makefile: 
 
-* [Makefile](Makefile) is the file which uses Make to execute each step sequentially to generate files [words_length.txt](words_length.txt), [words.en.crlf.txt](words.en.crlf.txt), and the image [length_disbution.png](length_disbution.png).
+* [Makefile](Makefile) is the file which uses Make to execute each step sequentially to generate files [words_length.txt](words_length.txt), [words.en.crlf.txt](words.en.crlf.txt), [words_starts.txt](words_starts.txt), and the image [length_disbution.png](length_disbution.png).
 
 3. Individual R scripts:
 
