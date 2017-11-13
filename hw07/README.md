@@ -4,7 +4,7 @@
 
 1. Final Report:
 
-* [hw07_make.md](w07_make.md) is the final report that presents original data, the statistical summaries of word lengths, and the distributions of words.
+* [hw07_make.md](hw07_make.md) is the final report that presents original data, the statistical summaries of word lengths, and the distributions of words.
 
 
 2. Makefile: 
