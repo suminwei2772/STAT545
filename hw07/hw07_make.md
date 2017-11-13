@@ -8,40 +8,20 @@ library(readr)
 library(ggplot2)
 library(readr)
 library(tidyverse)
-```
-
-    ## Loading tidyverse: tibble
-    ## Loading tidyverse: tidyr
-    ## Loading tidyverse: purrr
-    ## Loading tidyverse: dplyr
-
-    ## Conflicts with tidy packages ----------------------------------------------
-
-    ## filter(): dplyr, stats
-    ## lag():    dplyr, stats
-
-``` r
 args <- commandArgs(TRUE)
 ```
 
-Step 1: Dwonloading and writing to data frame the orginal data showing all the english words
+Step 1: Downloading and writing to data frame the orginal data showing all the english words.
+---------------------------------------------------------------------------------------------
 
 Source: <http://www-01.sil.org/linguistics/wordlists/english/wordlist/wordsEn.txt>
 
 ``` r
 knitr::opts_chunk$set(echo=TRUE)
-```
-
-The table below shows the first 100 words
-
-``` r
 en_words <- read_tsv(args[1], col_names="Words")
 ```
 
-    ## Parsed with column specification:
-    ## cols(
-    ##   Words = col_character()
-    ## )
+### The table below shows the first 100 words.
 
 ``` r
 knitr::kable(head(en_words, n=100))
@@ -150,7 +130,8 @@ knitr::kable(head(en_words, n=100))
 | abductions    |
 | abductor      |
 
-Step 2: Lengths of each words were calculated. Then, the number of words that started with each letter in the alphabet was counted.
+Step 2: Length of each word was calculated. Then, the number of words that started with each letter in the alphabet was counted.
+--------------------------------------------------------------------------------------------------------------------------------
 
 ``` r
 word_length <- data.frame(apply(en_words, 1, nchar)); colnames(word_length) <- c("Length"); rownames(word_length) <- NULL
@@ -159,7 +140,7 @@ en_words$start <- data.frame(do.call('rbind', strsplit(en_words$Words,'',fixed=T
 word_starts <- en_words %>% group_by(start) %>% count()
 ```
 
-Below is the word lengths of the first 100 words
+### Below are the word lengths of the first 100 words.
 
 ``` r
 knitr::kable(head(word_length, n=100))
@@ -268,12 +249,7 @@ knitr::kable(head(word_length, n=100))
 |      10|
 |       8|
 
-``` r
-# word_length was also written to a text file as shown below
-# en <- read_tsv("words_length.txt", col_names="Length")
-```
-
-Below is the number of words that starts with each letter of the alphabet.
+### Below is the number of words that starts with each letter of the alphabet.
 
 ``` r
 knitr::kable(word_starts)
@@ -309,9 +285,10 @@ knitr::kable(word_starts)
 | z     |    265|
 
 Step 3: Drawing graphs - a histogram of the distribution of the lengths of the English words and a bar graph showing the number of words that started with each letter in the alphabet.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ![plot](length_distribution.png)
 
-What we notice in the graph below is that words that start with "d" and "s" are the greatest in number.
+### What we notice in the graph below is that words that start with "d" and "s" are the greatest in number.
 
 ![plot](n_starts.png)
