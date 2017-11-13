@@ -1,5 +1,5 @@
 ---
-title: "hw07_make"
+title: "hw07 word length report using make"
 author: "Lisa Wei"
 date: '2017-11-12'
 output: github_document
@@ -31,7 +31,7 @@ head(en_words, n=100)
 Step 2: Lengths of each words was calculated
 
 ```{r en_words_length, warning=FALSE}
-word_length <- data.frame(apply(en_words, 1, nchar));
+word_length <- data.frame(apply(en_words, 1, nchar)); colnames(word_length) <- c("Length")
 head(word_length, n=100)
 
 # word_length was also written to a text file as shown below
