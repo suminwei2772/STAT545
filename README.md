@@ -51,7 +51,11 @@ Below are **links** to my reponses for weekly homework assignments:
   + [hw07_make.md](/hw07/hw07_make.md): is the final report which shows the distribution of word lengths and the number of words that start with each letter in the alphabet.
   
  
- 
+* Homework 8 (November 21, 2017)
+	Created a Shiny app deployed here: https://suminwei.shinyapps.io/gapminder_shiny_app_on_git/
+	+ [README.md for hw08](/hw08/README.md)
+	+ [ui.R](/hw08/ui.R)
+	+ [server.R](/hw08/server.R)
   
 ## Answers to questions posted for hw01 regarding providing a description of how this README.md file was written
 
