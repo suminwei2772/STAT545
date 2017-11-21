@@ -9,14 +9,7 @@ ui <- fluidPage(
 	br(),
 	br(),
 	sidebarPanel("Please select the range of years",
-							 sliderInput("yearIn","Year",
-							 						min=1981, max=2005, value=c(1999,2005), sep = "")),
-	
-	# radioButtons("typeIn", "what kind of booze?",
-	#              choices = c("BEER", "SPIRITS", "WINE"),
-	#              selected = c("WINE")),
-	
-	
+							 sliderInput("yearIn","Year", min=1981, max=2005, value=c(1999,2005), sep = "")),
 	
 	mainPanel(
 		plotOutput("Hist_Unemployment.Rate"), 
