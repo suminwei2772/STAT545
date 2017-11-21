@@ -1,4 +1,4 @@
-This Shiny app is deployed on shinyapps.io: https://suminwei.shinyapps.io/gapminder_unemployment_rate/
+This Shiny app is deployed on shinyapps.io: https://suminwei.shinyapps.io/gapminder_shiny_app_on_git/
 
 The app shows data taken from [Gapminder World demographic databases](https://www.gapminder.org/data/).
 Specifically, I downloaded the xlsx file for "Aged 25-54 unemployment rate (%)" as provided by the Interational Labour Organization. This file can be found in the Data folder: [indicator_25-54_unemploy.txt](Data/indicator_25-54_unemploy.txt).
@@ -15,7 +15,7 @@ The Shiny app contains several features:
 	* Search for the Country or Year and filter the table according to those searches.
 	* Choose number of entries to show for the table.
 
-4. Allow the user to download the results table as a .csv file. I added this feature using the `downloadButton()` and `downloadHandler()` functions. Within the Shiny code, I had to make sure the data to be downloaded was an interactive object in order for the `downloadButton()` and `downloadHandler()` functions to work.
+4. Allow the user to download the results table as a .txt file. I added this feature using the `downloadButton()` and `downloadHandler()` functions. Within the Shiny code, I had to make sure the data to be downloaded was an interactive object in order for the `downloadButton()` and `downloadHandler()` functions to work.
 
 5. The histogram is also interactive. The proportions of each colour for each bar in the graph is determined by the number of entries from each country from the selected year span falling within that specific bin.
 
