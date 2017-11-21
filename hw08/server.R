@@ -47,4 +47,4 @@ server <- function(input, output) {
 	output$tab <- renderUI({
 		tagList("Link to dataset used for this app:", url)
 	})
-}
+} 

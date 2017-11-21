@@ -24,7 +24,7 @@ ui <- fluidPage(
 		downloadButton('download',"Download the results table"),
 		DT::dataTableOutput("table_head"))
 	
-)
+) 
 
 
 

@@ -5,8 +5,8 @@ account: suminwei
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 238197
-bundleId: 1087294
+bundleId: 1087305
 url: https://suminwei.shinyapps.io/gapminder_shiny_app_on_git/
-when: 1511243896.63624
+when: 1511244178.58795
 asMultiple: FALSE
 asStatic: FALSE
