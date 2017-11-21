@@ -52,6 +52,7 @@ Below are **links** to my reponses for weekly homework assignments:
   
  
 * Homework 8 (November 21, 2017)
+
 	Created a Shiny app deployed here: https://suminwei.shinyapps.io/gapminder_shiny_app_on_git/
 	+ [README.md for hw08](/hw08/README.md)
 	+ [ui.R](/hw08/ui.R)
