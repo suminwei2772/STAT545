@@ -1,4 +1,4 @@
-Reflections\_powers\_Rpackage
+Reflections for the powers R package
 ================
 Lisa Wei
 2017-11-28
