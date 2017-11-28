@@ -12,31 +12,69 @@ knitr::opts_chunk$set(
 )
 ```
 
-__Note__: This R package is not mean to be "serious". It's just for teaching purposes. 
 
-# `powers`
+# `powers` package overview
 
-This is an R package that gives `sqrt()` friends by providing other power functions.
+This package contains functions that carry out power operations, log transformations, and conversion between Cartesian coordinates and polar coordinates.
 
+Specific functions include:
+
+  * `square` which squares a number or vector (i.e. raise to power of 2).
+
+  * `cube` which cubes a number or vector (i.e. raise to power of 3).
+
+  * `pow` which raises a number or vector to any power specified by the user.
+
+  * `logarithm` log transforms a number or vector. The `base` of the log is specified by the user.
+
+  * `polar_transform` converts two vectors in Cartesian coordinates into radius and angle, which specify the vectors' polar coordinates.
+  
 ## Installation
 
 You can install powers from github with:
 
 ```{r gh-installation, eval = FALSE}
-# install.packages("devtools")
-devtools::install_github("vincenzocoia/powers")
+devtools::install_git("git://github.com/suminwei2772/powers_package", branch="powers")
 ```
 
-## Example
 
-See the vignette for more extensive use, but here's an example:
-
-```{r example}
-powers::pow(2)
+First let us load the package:
+```{r, message=FALSE}
+library(powers)
+library(tidyverse)
 ```
 
-## For Developers
+## Using `square()`, `cube()`, and `pow()` functions
 
-(Again, I don't actually intend for anyone to develop this silly package, but if I did, here's what I'd write.)
+We will start off with some easy functions to see how the power operations are run.
 
-Use the internal `pow` function as the machinery for the front-end functions such as `square`, `cube`, and `reciprocal`. 
+```{r}
+square(1:10)
+cube(1:10)
+pow(1:10, a=10)
+```
+
+
+## Using `logarithm()`
+
+This function takes a log of a vector. The base of the logarithm is specified by the user.
+
+```{r}
+logarithm(1:10, base=2)
+logarithm(5, base=exp(1))
+```
+
+
+## Using `polar_transform()`
+
+This function transforms Cartesian coordinates into polar coordinates, as specified by `r` and `theta`. Output is a list.
+  
+  * `r` is the radius, given in the first element of the list output.
+  * `theta` is the angle between the `(x, y)` and the x-axis, as provided in the second list of the output.
+  
+```{r}
+polar_transform(1:10, 2:11)
+polar_transform(5, 1)
+```
+
+

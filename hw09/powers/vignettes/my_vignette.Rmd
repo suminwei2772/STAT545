@@ -1,37 +1,87 @@
 ---
 title: "Using the `powers` package"
-author: "Vincenzo Coia"
+author: "Lisa Wei"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output:
+  github_document:
+  rmarkdown::html_vignette:
 vignette: >
   %\VignetteIndexEntry{Using the `powers` package}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-__Note__: This package isn't actually meant to be "serious". I made it just for teaching purposes.
+This package contains functions that carry out power operations, log transformations, and conversion between Cartesian coordinates and polar coordinates.
 
-Want to compute powers without having to use `^` or `**`? Give `sqrt` some friends by loading the `powers` package! 
+Specific functions include:
 
-```{r}
+  * `square` which squares a number or vector (i.e. raise to power of 2).
+
+  * `cube` which cubes a number or vector (i.e. raise to power of 3).
+
+  * `pow` which raises a number or vector to any power specified by the user.
+
+  * `logarithm` log transforms a number or vector. The `base` of the log is specified by the user.
+
+  * `polar_transform` converts two vectors in Cartesian coordinates into radius and angle, which specify the vectors' polar coordinates.
+  
+
+First let us load the package:
+```{r, message=FALSE}
 library(powers)
+library(tidyverse)
 ```
 
-Want squares, cubes, or reciprocals? Easy.
+## Using `square()`, `cube()`, and `pow()` functions
+
+We will start off with some easy functions to see how the power operations are run.
 
 ```{r}
 square(1:10)
 cube(1:10)
-
+pow(1:10, a=10)
 ```
 
-`apply`-family friendly, too!
+The `square` and `cube` operations can be used with `apply` functions. In other words, functions in the `powers` package can operate on each number or vector in a list, sequentially. 
 
 ```{r}
 my_list <- list(1:10, 0.5, -0.7)
-## So base-R-boring!
-lapply(my_list, function(x) x^2)
-## Use powers instead!
+
+## Operate on this list using square, cube, and pow
+
 lapply(my_list, square)
+lapply(my_list, cube)
 ```
+
+Let's try using `pow` and raise each element in the list to the power of `10`. 
+
+```{r}
+lapply(my_list, function(x){pow(x,a=10)})
+
+```
+
+
+## Using `logarithm()`
+
+This function takes a log of a vector. The base of the logarithm is specified by the user.
+
+```{r}
+logarithm(1:10, base=2)
+logarithm(5, base=exp(1))
+```
+
+
+## Using `polar_transform()`
+
+This function transforms Cartesian coordinates into polar coordinates, as specified by `r` and `theta`. Output is a list.
+  
+  * `r` is the radius, given in the first element of the list output.
+  * `theta` is the angle between the `(x, y)` and the x-axis, as provided in the second list of the output.
+
+```{r}
+polar_transform(1:10, 2:11)
+polar_transform(5, 1)
+```
+
+
 
