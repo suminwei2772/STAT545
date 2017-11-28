@@ -34,7 +34,7 @@ Specific functions include:
 You can install powers from github with:
 
 ```{r gh-installation, eval = FALSE}
-devtools::install_git("git://github.com/suminwei2772/powers_package", branch="powers")
+devtools::install_github("suminwei2772/STAT545-547-hw-Wei-Lisa", subdir="hw09/powers")
 ```
 
 
