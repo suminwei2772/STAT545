@@ -64,7 +64,7 @@ Below are **links** to my reponses for weekly homework assignments:
 
 	+ I made a separate repository for the package I made named `powers` (building on what was done in class). The powers package can be found [here](https://github.com/suminwei2772/powers).
 
-		Relevant files are listed below.
+	Relevant files are listed below.
 
 	+ [README.md](https://github.com/suminwei2772/powers/blob/master/README.md) contains summary of the package (includes installation instructions)
 
