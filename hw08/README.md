@@ -22,3 +22,6 @@ The Shiny app contains several features:
 6. Sidebar contains a sliding panel to choose the range of years the viewer wants to look at.
 
 
+
+## Progress/Resources used
+I encountered problems in figuring out how to use the `downloadButton()` and `downloadHandler()` functions. The [downloadData example](https://shiny.rstudio.com/reference/shiny/1.0.4/downloadButton.html) was helpful. I originally wanted to output a .csv file, but for some reason I could not change the output format. With the output set as a text (.txt) file, it was much easier to control the format.
