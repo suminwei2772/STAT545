@@ -3,15 +3,13 @@ API
 Lisa Wei
 2017-11-30
 
-API
----
+For this assignment, I've decided to use the OMDb API: `https://www.omdbapi.com/` to get info about movies.
 
-having a url, post other things on url OMDb API: <https://www.omdbapi.com/> --&gt; get info about movies
+### Need a key to access the information: ask for an API key
 
-If enter movie title: get the API <http://www.omdbapi.com/?t=Thor&y=2017> --&gt; intended for computers to look at
+I requested an API key: `apikey=df5f9e85`
 
-need a key to access the information: ask for an API key
---------------------------------------------------------
+#### Load the relevant packages
 
 ``` r
 library(httr)
@@ -46,12 +44,18 @@ library(tibble)
 library(knitr)
 ```
 
+Example of getting movie info from the web
+------------------------------------------
+
 ``` r
 thor_result <- httr::GET(url = "http://www.omdbapi.com/?t=Thor&y=2017&apikey=df5f9e85")
  
 thor_content <- content(thor_result)
 #thor_content %>% View()
 ```
+
+Let's write a function to retrieve movie info
+---------------------------------------------
 
 ``` r
 get_movie_TY <- function(title, year){
@@ -62,18 +66,23 @@ get_movie_TY <- function(title, year){
 }
 ```
 
+Getting movie that contains `babe` or `time` in title and also `The Matrix`
+---------------------------------------------------------------------------
+
 ``` r
 babe <- get_movie_TY(title="babe",year="")
-#View(babe)
 
-## Empty spaces are not good
 neo <- get_movie_TY(title="Matrix",year="1999")
 
-## Error in View : cannot coerce class "c("xml_document", "xml_node")" to a data.frame
-
-##The tibble package has a function enframe() that solves this problem by coercing nested list objects to nested tibble ("tidy" data frame) objects.
 time <- get_movie_TY(title="time",year="")
+```
 
+Formatting the outputs into table format
+----------------------------------------
+
+The tibble package has a function enframe() that solves this problem by coercing nested list objects to nested tibble ("tidy" data frame) objects.
+
+``` r
 neo_df <- t(enframe(neo)); colnames(neo_df) <- names(neo); neo_df <- neo_df[-which(rownames(neo_df)=="name"),]
 babe_df <- t(enframe(babe)); colnames(babe_df) <- names(babe); babe_df <- babe_df[-which(rownames(babe_df)=="name"),]
 time_df <- t(enframe(time)); colnames(time_df) <- names(time); time_df <- time_df[-which(rownames(time_df)=="name"),]
