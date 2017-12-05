@@ -71,4 +71,7 @@ Below are **links** to my reponses for weekly homework assignments:
 	+ [Vignette](https://htmlpreview.github.io/?https://github.com/suminwei2772/powers/blob/master/inst/doc/my_vignette.html) contains in-depth explanations
 
 
+* Homework 10 (December 6, 2017): Using API
 
+	+ [README.md](https://github.com/suminwei2772/STAT545-547-hw-Wei-Lisa/blob/master/hw10/README.md)
+	+ [hw10_API.md](https://github.com/suminwei2772/STAT545-547-hw-Wei-Lisa/blob/master/hw10/hw10_API.md)
