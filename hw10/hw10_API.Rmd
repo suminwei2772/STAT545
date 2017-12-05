@@ -23,6 +23,7 @@ library(httr)
 library(dplyr)
 library(glue)
 library(tibble)
+library(knitr)
 ```
 
 ```{r setup2}
@@ -61,9 +62,15 @@ time_df <- t(enframe(time)); colnames(time_df) <- names(time); time_df <- time_d
 
 df <- rbind(neo_df, babe_df, time_df); colnames(df) <- names(neo)
 
-
 ```
 
+
+## Final output table with all the movies/info extracted from the web
+
+```{r table_output}
+kable(df)
+
+```
 
 
 
